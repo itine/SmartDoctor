@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SmartDoctor.Data.Models;
 using SmartDoctor.Testing.Models;
 
 namespace SmartDoctor.Testing.Core
@@ -22,6 +23,21 @@ namespace SmartDoctor.Testing.Core
             if (!questions.Any())
                 throw new Exception("Questions not found");
             return questions;
+        }
+
+        public async Task PassTest(AnswerModel answerModel)
+        {
+            var answerData = string.Join(';', answerModel.Answers);
+            var answer = new Answers
+            {
+                AnswerData = answerData,
+                AnswerDate = DateTime.UtcNow,
+                DataSetName = answerModel.AnswerName,
+                IsTakenToCalculate = false,
+                PatientId = answerModel.PatientId
+            };
+            _context.Answers.Add(answer);
+            await _context.SaveChangesAsync();
         }
     }
 }
