@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartDoctor.Data", "SmartDoctor.Data\SmartDoctor.Data.csproj", "{9796C506-DEC1-4566-BAB9-3BBB6C9809A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartDoctor.Data", "SmartDoctor.Data\SmartDoctor.Data.csproj", "{9796C506-DEC1-4566-BAB9-3BBB6C9809A8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartDoctor.Helper", "SmartDoctor.Helper\SmartDoctor.Helper.csproj", "{3586F55C-BE5E-45BE-B4D2-5870DBE4EEC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartDoctor.Testing", "SmartDoctor.Testing\SmartDoctor.Testing.csproj", "{C02DA9CF-0FD7-4CD9-9CE2-CEC1879079CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartDoctor.Web", "SmartDoctor.Web\SmartDoctor.Web.csproj", "{98A3936A-7E01-4E7F-BE06-A4A522C38CFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{9796C506-DEC1-4566-BAB9-3BBB6C9809A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9796C506-DEC1-4566-BAB9-3BBB6C9809A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9796C506-DEC1-4566-BAB9-3BBB6C9809A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3586F55C-BE5E-45BE-B4D2-5870DBE4EEC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3586F55C-BE5E-45BE-B4D2-5870DBE4EEC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3586F55C-BE5E-45BE-B4D2-5870DBE4EEC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3586F55C-BE5E-45BE-B4D2-5870DBE4EEC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C02DA9CF-0FD7-4CD9-9CE2-CEC1879079CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C02DA9CF-0FD7-4CD9-9CE2-CEC1879079CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C02DA9CF-0FD7-4CD9-9CE2-CEC1879079CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C02DA9CF-0FD7-4CD9-9CE2-CEC1879079CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98A3936A-7E01-4E7F-BE06-A4A522C38CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98A3936A-7E01-4E7F-BE06-A4A522C38CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98A3936A-7E01-4E7F-BE06-A4A522C38CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98A3936A-7E01-4E7F-BE06-A4A522C38CFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
