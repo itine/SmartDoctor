@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SmartDoctor.Testing.Controllers
 {
-    [Authorize]
+  //  [Authorize]
     public class TestingController : Controller
     {
         private readonly ITestRepository _testRepository;
@@ -18,7 +18,7 @@ namespace SmartDoctor.Testing.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTest()
+        public async Task<IActionResult> GetQuestions()
         {
             try
             {
@@ -26,7 +26,7 @@ namespace SmartDoctor.Testing.Controllers
                       new
                       {
                           Success = true,
-                          Data = JsonConvert.SerializeObject(await _testRepository.GetTest())
+                          Data = JsonConvert.SerializeObject(await _testRepository.GetQuestions())
                       });
             }
             catch (Exception exception)
@@ -41,6 +41,25 @@ namespace SmartDoctor.Testing.Controllers
             try
             {
                 await _testRepository.PassTest(model);
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = "ok"
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
+
+        [HttpPost("EvaluateAnswer")]
+        public async Task<IActionResult> EvaluateAnswer(int id)
+        {
+            try
+            {
+                await _testRepository.EvaluateAnswer(new Models.Answers { });
                 return Json(
                       new
                       {

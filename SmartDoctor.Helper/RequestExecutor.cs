@@ -1,6 +1,6 @@
 ﻿using RestSharp;
 using SmartDoctor.Data.Consts;
-using SmartDoctor.Data.Enums;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -8,11 +8,10 @@ namespace SmartDoctor.Helper
 {
     public class RequestExecutor
     {
-        public static async Task<string> ExecuteRequestAsync(MicroservicesEnum microservice, 
-            RequestUrls requestUrl, Parameter[] requestParameters)
+        public static async Task<string> ExecuteRequestAsync(MicroservicesEnum microservice,
+            KeyValuePair<string, Method> requestUrl, Parameter[] requestParameters)
         {
-            var method = (byte)requestUrl == Scope.GetMethodId ? Method.GET : Method.POST;
-            var request = new RestRequest(requestUrl.GetStringValue(), method)
+            var request = new RestRequest(requestUrl.Key, requestUrl.Value)
                 .AddHeader("Content-type", "application/json");
             foreach (var param in requestParameters)
                 request.AddParameter(param);
@@ -32,12 +31,13 @@ namespace SmartDoctor.Helper
         }
     }
     
-    public enum RequestUrls : byte
+    public static class RequestUrl
     {
-        [StringValue("/GetTest")]
-        GetTest = Scope.GetMethodId,
-        [StringValue("/PassTheTest")]
-        PassTheTest = Scope.PostMethodId
+        public static KeyValuePair<string, Method> PassTheTest = new KeyValuePair<string, Method> ("/PassTheTest", Method.POST);
+        public static KeyValuePair<string, Method> GetQuestions = new KeyValuePair<string, Method> ("/GetQuestions", Method.GET);
+        public static KeyValuePair<string, Method> GetAnswers = new KeyValuePair<string, Method> ("/GetAnswers", Method.GET);
+        public static KeyValuePair<string, Method> GetDeseaseNameById = new KeyValuePair<string, Method> ("/GetDeseaseNameById", Method.GET);
+        public static KeyValuePair<string, Method> EvaluateAnswer = new KeyValuePair<string, Method>("/EvaluateAnswer", Method.POST);
     }
 
     /// <summary>
@@ -48,7 +48,7 @@ namespace SmartDoctor.Helper
         [StringValue("50001")]
         Desease,
         [StringValue("50002")]
-        Todo
+        Testing
     }
 
 }

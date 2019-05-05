@@ -17,7 +17,7 @@
     },
     "SmartDoctor.Testing": {
       "commandName": "Project",
-      "applicationUrl": "https://localhost:50002;http://localhost:50002",
+      "applicationUrl": "http://localhost:50002",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

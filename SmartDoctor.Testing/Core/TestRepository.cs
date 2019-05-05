@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Accord.MachineLearning.DecisionTrees.Learning;
+using Accord.Math;
+using Accord.Statistics.Filters;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using RestSharp;
 using SmartDoctor.Data.Models;
+using SmartDoctor.Helper;
 using SmartDoctor.Testing.Models;
 
 namespace SmartDoctor.Testing.Core
@@ -17,7 +24,11 @@ namespace SmartDoctor.Testing.Core
             _context = context;
         }
 
-        public async Task<IEnumerable<Questions>> GetTest()
+        public async Task<IEnumerable<Answers>> GetAnswers() =>
+            await _context.Answers
+                .Where( x=> x.IsTakenToCalculate.HasValue && x.IsTakenToCalculate.Value).ToListAsync();
+
+        public async Task<IEnumerable<Questions>> GetQuestions()
         {
             var questions = await _context.Questions.ToListAsync();
             if (!questions.Any())
@@ -25,7 +36,7 @@ namespace SmartDoctor.Testing.Core
             return questions;
         }
 
-        public async Task PassTest(AnswerModel answerModel)
+        public async Task<long> PassTest(AnswerModel answerModel)
         {
             var answerData = string.Join(';', answerModel.Answers);
             var answer = new Answers
@@ -38,6 +49,63 @@ namespace SmartDoctor.Testing.Core
             };
             _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
+            return answer.AnswerId;
+        }
+
+        public async Task EvaluateAnswer(Answers answer)
+        {
+            answer = await _context.Answers.FirstOrDefaultAsync();
+            var data = new DataTable("Define the disease");
+            var questions = (await GetQuestions()).ToArray();
+            var answers = await GetAnswers();
+            foreach (var question in questions)
+                data.Columns.Add(new DataColumn(question.Text, typeof(string)));
+            data.Columns.Add(new DataColumn("Diagnosed Disease", typeof(string)));
+            foreach(var trainningAnswer in answers)
+            {
+                var answerArr = trainningAnswer.DataSetName.Split(';');
+                if (answerArr.Length != questions.Length)
+                    throw new Exception("Answers count must be equals questions count");
+                var patient = data.NewRow();
+                for (var i = 0; i < answerArr.Length; i++)
+                    patient[questions[i].Text] = answerArr[i];
+                var diseaseResponse = await RequestExecutor.ExecuteRequestAsync(
+                    MicroservicesEnum.Desease, RequestUrl.GetDeseaseNameById,
+                        new Parameter[] {
+                            new Parameter("diseaseId", trainningAnswer.DeseaseId, ParameterType.RequestBody)
+                        });
+                var diseaseName = JsonConvert.DeserializeObject<MksResponse>(diseaseResponse);
+                patient["Diagnosed Disease"] = diseaseName.Data;
+                data.Rows.Add(patient);
+            }
+            var codification = new Codification(data);
+            var codifiedData = codification.Apply(data);
+            int[][] input = codifiedData.ToJagged<int>(questions.Select(x => x.Text).ToArray());
+            int[] predictions = codifiedData.ToArray<int>("Diagnosed Disease");
+            var decisionTreeLearningAlgorithm = new ID3Learning { };
+            var decisionTree = decisionTreeLearningAlgorithm.Learn(input, predictions);
+            var answerArray = answer.DataSetName.Split(';');
+            if (answerArray.Length != questions.Length)
+                throw new Exception("Answers count must be equals questions count");
+            var inputValues = new string [questions.Length, 2];
+            for (var i = 0; i < answerArray.Length; i++)
+            {
+                inputValues[i, 0] = questions[i].Text;
+                inputValues[i, 1] = answerArray[i];
+            }
+            //var a = new[,]{ {"Are you above 50 years old?","22" },
+            //                                       { "What is your gender?","male" },
+            //                                       { "Do you have headache?" ,"yes"},
+            //                                       { "Has your blood pressure gone above 12 in the last 30 days?","yes" },
+            //                                       { "Do you have a running nose?","yes" },
+            //                                       { "Do you have a soat throat?" ,"yes"},
+            //                                       { "Do you have fever?" ,"yes"} };
+            //a += { "Are you above 50 years old?","22" };
+            var query = codification.Transform(inputValues);
+            var result = decisionTree.Decide(query);
+            var diagnosis = codification.Revert("Diagnosed Disease", result);
+
+            Console.WriteLine($"Diagnosed disease: {diagnosis}"); 
         }
     }
 }

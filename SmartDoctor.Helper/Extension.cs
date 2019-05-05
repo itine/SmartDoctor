@@ -12,7 +12,7 @@ namespace SmartDoctor.Helper
             var fieldInfo = type.GetField(value.ToString());
             var attrs = fieldInfo.GetCustomAttributes(typeof(StringValue), false) as StringValue[];
             if (attrs.Any())
-                stringValue = attrs[0].Value;
+                stringValue = attrs.First().Value;
             return stringValue;
         }
     }

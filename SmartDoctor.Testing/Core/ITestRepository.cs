@@ -7,7 +7,9 @@ namespace SmartDoctor.Testing.Core
 {
     public interface ITestRepository
     {
-        Task<IEnumerable<Questions>> GetTest();
-        Task PassTest(AnswerModel answer);
+        Task<IEnumerable<Questions>> GetQuestions();
+        Task<long> PassTest(AnswerModel answer);
+        Task<IEnumerable<Answers>> GetAnswers();
+        Task EvaluateAnswer(Answers answer);
     }
 }
