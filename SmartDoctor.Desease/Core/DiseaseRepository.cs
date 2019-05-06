@@ -12,14 +12,14 @@ namespace SmartDoctor.Desease.Core
 {
     public class DiseaseRepository : IDiseaseRepository
     {
-        private readonly SmartDoctor_DeseasesContext _context;
+        private readonly SmartDoctor_DiseasesContext _context;
 
-        public DiseaseRepository(SmartDoctor_DeseasesContext context)
+        public DiseaseRepository(SmartDoctor_DiseasesContext context)
         {
             _context = context;
         }
 
-        public async Task<Deseases> DiseaseDiagnostic(long answerId)
+        public async Task<Diseases> DiseaseDiagnostic(long answerId)
         {
             var diseaseResponse = await RequestExecutor.ExecuteRequestAsync(
                   MicroservicesEnum.Testing, RequestUrl.EvaluateAnswer,
@@ -30,12 +30,12 @@ namespace SmartDoctor.Desease.Core
             return null;
         }
 
-        public async Task<Deseases> GetDiseaseById(int diseaseId)
+        public async Task<string> GetDeseaseNameById(int diseaseId)
         {
-            var disease = await _context.Deseases.FirstOrDefaultAsync(x => x.DeseaseId == diseaseId);
+            var disease = await _context.Diseases.FirstOrDefaultAsync(x => x.DiseaseId == diseaseId);
             if (disease == null)
                 throw new Exception("Disease not found");
-            return disease;
+            return disease.Name;
         }
     }
 }

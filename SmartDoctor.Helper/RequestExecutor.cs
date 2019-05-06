@@ -19,6 +19,12 @@ namespace SmartDoctor.Helper
             return await Execute($"http://localhost:{microservice.GetStringValue()}/", request);
         }
 
+        public static async Task<string> ExecuteExternalRequestAsync(string url, Method method)
+        {
+            var request = new RestRequest(url, method);
+            return await Execute(Scope.ExternalDrugApiUrl, request);
+        }
+
         private static async Task<string> Execute(string address, IRestRequest request)
         {
             var cookieContainer = new CookieContainer();
@@ -36,7 +42,7 @@ namespace SmartDoctor.Helper
         public static KeyValuePair<string, Method> PassTheTest = new KeyValuePair<string, Method> ("/PassTheTest", Method.POST);
         public static KeyValuePair<string, Method> GetQuestions = new KeyValuePair<string, Method> ("/GetQuestions", Method.GET);
         public static KeyValuePair<string, Method> GetAnswers = new KeyValuePair<string, Method> ("/GetAnswers", Method.GET);
-        public static KeyValuePair<string, Method> GetDeseaseNameById = new KeyValuePair<string, Method> ("/GetDeseaseNameById", Method.GET);
+        public static KeyValuePair<string, Method> GetDiseaseNameById = new KeyValuePair<string, Method> ("/GetDiseaseNameById", Method.POST);
         public static KeyValuePair<string, Method> EvaluateAnswer = new KeyValuePair<string, Method>("/EvaluateAnswer", Method.POST);
     }
 
@@ -46,7 +52,7 @@ namespace SmartDoctor.Helper
     public enum MicroservicesEnum
     {
         [StringValue("50001")]
-        Desease,
+        Disease,
         [StringValue("50002")]
         Testing
     }

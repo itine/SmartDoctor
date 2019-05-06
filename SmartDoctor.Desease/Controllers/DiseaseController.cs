@@ -33,5 +33,23 @@ namespace SmartDoctor.Desease.Controllers
                 return Json(new { Success = false, exception.Message });
             }
         }
+
+        [HttpPost("GetDiseaseNameById")]
+        public async Task<IActionResult> GetDiseaseNameById([FromBody] int diseaseId)
+        {
+            try
+            {
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = JsonConvert.SerializeObject(await _diseaseRepository.GetDeseaseNameById(diseaseId), Formatting.Indented)
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
     }
 }

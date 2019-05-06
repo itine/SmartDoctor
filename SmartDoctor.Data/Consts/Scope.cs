@@ -2,7 +2,6 @@
 {
     public class Scope
     {
-        public const byte GetMethodId = 0;
-        public const byte PostMethodId = 1;
+        public const string ExternalDrugApiUrl = "https://aidsinfo.nih.gov/api/drugs/";
     }
 }

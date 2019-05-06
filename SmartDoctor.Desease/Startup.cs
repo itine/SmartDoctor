@@ -29,9 +29,10 @@ namespace SmartDoctor.Desease
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddDbContext<SmartDoctor_DeseasesContext>(options => options
+            services.AddDbContext<SmartDoctor_DiseasesContext>(options => options
               .UseSqlServer(Configuration.GetConnectionString("LocalDB")));
             services.AddScoped<IDiseaseRepository, DiseaseRepository>();
+            services.AddScoped<IDrugRepository, DrugRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

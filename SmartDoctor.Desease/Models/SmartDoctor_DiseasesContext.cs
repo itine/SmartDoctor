@@ -2,24 +2,24 @@
 
 namespace SmartDoctor.Testing.Models
 {
-    public partial class SmartDoctor_DeseasesContext : DbContext
+    public partial class SmartDoctor_DiseasesContext : DbContext
     {
-        public SmartDoctor_DeseasesContext()
+        public SmartDoctor_DiseasesContext()
         {
         }
 
-        public SmartDoctor_DeseasesContext(DbContextOptions<SmartDoctor_DeseasesContext> options)
+        public SmartDoctor_DiseasesContext(DbContextOptions<SmartDoctor_DiseasesContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<Deseases> Deseases { get; set; }
+        public virtual DbSet<Diseases> Diseases { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Deseases>(entity =>
+            modelBuilder.Entity<Diseases>(entity =>
             {
-                entity.HasKey(e => e.DeseaseId);
+                entity.HasKey(e => e.DiseaseId);
 
                 entity.Property(e => e.Description).HasMaxLength(50);
 

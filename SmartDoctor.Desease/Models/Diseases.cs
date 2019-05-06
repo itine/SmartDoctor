@@ -1,9 +1,9 @@
 ﻿
 namespace SmartDoctor.Testing.Models
 {
-    public partial class Deseases
+    public partial class Diseases
     {
-        public int DeseaseId { get; set; }
+        public int DiseaseId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
