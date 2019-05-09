@@ -218,3 +218,12 @@ SmartDoctor.Medical/bin/Debug/netcoreapp2.1/SmartDoctor.Medical.runtimeconfig.de
 SmartDoctor.Medical/bin/Debug/netcoreapp2.1/SmartDoctor.Medical.pdb
 SmartDoctor.Medical/bin/Debug/netcoreapp2.1/SmartDoctor.Medical.dll
 SmartDoctor.Medical/bin/Debug/netcoreapp2.1/Accord.dll.config
+SmartDoctor.User/bin/Debug/netcoreapp2.1/SmartDoctor.Helper.pdb
+SmartDoctor.User/bin/Debug/netcoreapp2.1/SmartDoctor.Data.pdb
+SmartDoctor.User/bin/Debug/netcoreapp2.1/Accord.dll.config
+SmartDoctor.User/bin/Debug/netcoreapp2.1/SmartDoctor.Helper.dll
+SmartDoctor.User/bin/Debug/netcoreapp2.1/SmartDoctor.Data.dll
+SmartDoctor.User/obj/Debug/netcoreapp2.1/SmartDoctor.User.csproj.CopyComplete
+SmartDoctor.User/bin/Debug/netcoreapp2.1/SmartDoctor.User.dll
+SmartDoctor.User/bin/Debug/netcoreapp2.1/SmartDoctor.User.deps.json
+SmartDoctor.User/bin/Debug/netcoreapp2.1/SmartDoctor.User.pdb
