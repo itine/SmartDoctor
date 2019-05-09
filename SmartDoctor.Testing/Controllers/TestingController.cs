@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SmartDoctor.Data.Consts;
 using SmartDoctor.Data.Models;
+using SmartDoctor.Helper;
 using SmartDoctor.Testing.Core;
 using System;
 using System.Threading.Tasks;
 
 namespace SmartDoctor.Testing.Controllers
 {
-  //  [Authorize]
     public class TestingController : Controller
     {
         private readonly ITestRepository _testRepository;
@@ -17,7 +18,7 @@ namespace SmartDoctor.Testing.Controllers
             _testRepository = testRepository;
         }
 
-        [HttpGet]
+        [HttpGet(Scope.GetQuestions)]
         public async Task<IActionResult> GetQuestions()
         {
             try
@@ -35,7 +36,7 @@ namespace SmartDoctor.Testing.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost(Scope.PassTheTest)]
         public async Task<IActionResult> PassTheTest(AnswerModel model)
         {
             try
@@ -54,7 +55,7 @@ namespace SmartDoctor.Testing.Controllers
             }
         }
 
-        [HttpPost("EvaluateAnswer")]
+        [HttpPost(Scope.EvaluateAnswer)]
         public async Task<IActionResult> EvaluateAnswer(int id)
         {
             try

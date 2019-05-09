@@ -9,12 +9,13 @@ namespace SmartDoctor.Helper
     public class RequestExecutor
     {
         public static async Task<string> ExecuteRequestAsync(MicroservicesEnum microservice,
-            KeyValuePair<string, Method> requestUrl, Parameter[] requestParameters)
+            KeyValuePair<string, Method> requestUrl, Parameter[] requestParameters = null)
         {
             var request = new RestRequest(requestUrl.Key, requestUrl.Value)
                 .AddHeader("Content-type", "application/json");
-            foreach (var param in requestParameters)
-                request.AddParameter(param);
+            if (requestParameters != null)
+                foreach (var param in requestParameters)
+                    request.AddParameter(param);
             //TODO: get url from config
             return await Execute($"http://localhost:{microservice.GetStringValue()}/", request);
         }
@@ -36,14 +37,14 @@ namespace SmartDoctor.Helper
             return response.Content;
         }
     }
-    
+
     public static class RequestUrl
     {
-        public static KeyValuePair<string, Method> PassTheTest = new KeyValuePair<string, Method> ("/PassTheTest", Method.POST);
-        public static KeyValuePair<string, Method> GetQuestions = new KeyValuePair<string, Method> ("/GetQuestions", Method.GET);
-        public static KeyValuePair<string, Method> GetAnswers = new KeyValuePair<string, Method> ("/GetAnswers", Method.GET);
-        public static KeyValuePair<string, Method> GetDiseaseNameById = new KeyValuePair<string, Method> ("/GetDiseaseNameById", Method.POST);
-        public static KeyValuePair<string, Method> EvaluateAnswer = new KeyValuePair<string, Method>("/EvaluateAnswer", Method.POST);
+        public static KeyValuePair<string, Method> PassTheTest = new KeyValuePair<string, Method>($"/{Scope.PassTheTest}", Method.POST);
+        public static KeyValuePair<string, Method> GetQuestions = new KeyValuePair<string, Method>($"/{Scope.GetQuestions}", Method.GET);
+        public static KeyValuePair<string, Method> GetAnswers = new KeyValuePair<string, Method>($"/{Scope.GetAnswers}", Method.GET);
+        public static KeyValuePair<string, Method> GetDiseaseNameById = new KeyValuePair<string, Method>($"/{GetDiseaseNameById}", Method.POST);
+        public static KeyValuePair<string, Method> EvaluateAnswer = new KeyValuePair<string, Method>($"/{EvaluateAnswer}", Method.POST);
     }
 
     /// <summary>

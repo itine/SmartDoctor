@@ -150,3 +150,4 @@ SmartDoctor.Testing/bin/Debug/netcoreapp2.1/Accord.dll.config
 SmartDoctor.Helper/bin/Debug/netcoreapp2.1/Accord.dll.config
 SmartDoctor.Desease/obj/Debug/netcoreapp2.1/SmartDoctor.Desease.pdb
 SmartDoctor.Desease/obj/Debug/netcoreapp2.1/SmartDoctor.Desease.dll
+SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/Test/GetTest.g.cshtml.cs

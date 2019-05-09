@@ -43,7 +43,6 @@ namespace SmartDoctor.Testing.Core
             {
                 AnswerData = answerData,
                 AnswerDate = DateTime.UtcNow,
-                DataSetName = answerModel.AnswerName,
                 IsTakenToCalculate = false,
                 PatientId = answerModel.PatientId
             };

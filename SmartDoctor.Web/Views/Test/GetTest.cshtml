@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewData["Title"] = "Pass the test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using SmartDoctor.Testing.Models;
+@model IEnumerable<Questions>
+
+<h2>Pass the test</h2>
+
+<head>
+</head>
+<body>
+
+    <div id="questions-list">
+        <h2>Questions:</h2>
+        <hr />
+        <table id="questionsTable" class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Question</th>
+                <th>Your answer</th>
+            </tr>
+            @foreach (var question in Model)
+            {
+            <tr>
+                <td>
+                    <input type="text" id="question" value="@question.QuestionId" hidden="hidden" />
+                    @question.Text?
+                </td>
+                <td width="10">
+                    <input style="width:auto;" type="text" id="answer" />
+                </td>
+            </tr>
+            }
+        </table>
+        <center>
+            <button class="btn-success" style="width: 150px; height: 30px;" id="passTheTestButton" onclick="onClickPassTheTestButton()">Pass the test</button>
+        </center>
+    </div>
+</body>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var UIelements = ["question", "answer"];
+        for (i = 0; i < UIelements.length; i++) {
+            var elementsById = document.querySelectorAll('[id=' + UIelements[i] + ']');
+            for (j = 0; j < elementsById.length; j++) {
+                var newID = UIelements[i] + "_" + j;
+                $(elementsById[j]).attr('id', newID);
+            }
+        }
+    });
+
+    function validateString(val) {
+        if (val.trim() === "") {
+            alert("Укажите значения");
+            return false;
+        }
+        return true;
+    }
+
+    function getAnswers() {
+        var result = [];
+        var answers = document.querySelectorAll('[id=answer]');
+        for (j = 0; j < answers.length; j++) {
+            var answer = $(answers[j].value.toString()).selector;
+            if (!validateString(defect)) {
+                return;
+            }
+            result.push({
+                "Answer": answer
+            });
+        }
+        return result;
+    }
+   
+    function onClickPassTheTestButton() {
+        debugger;
+        var answers = getAnswers();
+        var patient = @ViewBag.PatientId;
+        var urlPath = '@Url.Action("PassTheTest", "Test")';
+        $.ajax({
+            type: "POST",
+            url: urlPath,
+            data: {
+                "PatientId": patient,
+                "Answers": answers
+            },
+            dataType: "html",
+            success: function (data) {
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+</script>
