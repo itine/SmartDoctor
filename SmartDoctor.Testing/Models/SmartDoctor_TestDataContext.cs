@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace SmartDoctor.Testing.Models
 {
@@ -15,7 +17,7 @@ namespace SmartDoctor.Testing.Models
 
         public virtual DbSet<Answers> Answers { get; set; }
         public virtual DbSet<Questions> Questions { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Answers>(entity =>
@@ -25,8 +27,6 @@ namespace SmartDoctor.Testing.Models
                 entity.Property(e => e.AnswerData).HasMaxLength(50);
 
                 entity.Property(e => e.AnswerDate).HasColumnType("date");
-
-                entity.Property(e => e.DataSetName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Questions>(entity =>

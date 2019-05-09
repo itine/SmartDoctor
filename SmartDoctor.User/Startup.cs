@@ -4,10 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SmartDoctor.Medical.Core;
-using SmartDoctor.Medical.Models;
+//using SmartDoctor.User.Models;
 
-namespace SmartDoctor.Desease
+namespace SmartDoctor.User
 {
     public class Startup
     {
@@ -29,10 +28,9 @@ namespace SmartDoctor.Desease
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddDbContext<SmartDoctor_MedicalContext>(options => options
-              .UseSqlServer(Configuration.GetConnectionString("LocalDB")));
-            services.AddScoped<IDiseaseRepository, DiseaseRepository>();
-            services.AddScoped<IDrugRepository, DrugRepository>();
+            //services.AddDbContext<SmartDoctor_UsersContext>(options => options
+            //  .UseSqlServer(Configuration.GetConnectionString("LocalDB")));
+            //services.AddScoped<IDiseaseRepository, DiseaseRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

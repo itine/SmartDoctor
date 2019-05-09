@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using SmartDoctor.Desease.Core;
+using SmartDoctor.Medical.Core;
 using System;
 using System.Threading.Tasks;
 
-namespace SmartDoctor.Desease.Controllers
+namespace SmartDoctor.Medical.Controllers
 {
     //[Authorize]
     public class DiseaseController : Controller

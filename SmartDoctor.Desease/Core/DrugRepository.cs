@@ -5,7 +5,7 @@ using RestSharp;
 using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
 
-namespace SmartDoctor.Desease.Core
+namespace SmartDoctor.Medical.Core
 {
     public class DrugRepository : IDrugRepository
     {

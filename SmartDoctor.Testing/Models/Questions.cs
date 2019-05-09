@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+
 namespace SmartDoctor.Testing.Models
 {
     public partial class Questions

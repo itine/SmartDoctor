@@ -1,8 +1,8 @@
 ﻿
-using SmartDoctor.Testing.Models;
+using SmartDoctor.Medical.Models;
 using System.Threading.Tasks;
 
-namespace SmartDoctor.Desease.Core
+namespace SmartDoctor.Medical.Core
 {
     public interface IDiseaseRepository
     {

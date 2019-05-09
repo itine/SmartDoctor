@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SmartDoctor.Desease.Core;
+using SmartDoctor.Medical.Core;
 
-namespace SmartDoctor.Desease.Controllers
+namespace SmartDoctor.Medical.Controllers
 {
     public class DrugController : Controller
     {

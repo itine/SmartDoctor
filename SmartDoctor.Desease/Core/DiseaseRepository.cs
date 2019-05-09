@@ -3,18 +3,18 @@ using Newtonsoft.Json;
 using RestSharp;
 using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
-using SmartDoctor.Testing.Models;
+using SmartDoctor.Medical.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartDoctor.Desease.Core
+namespace SmartDoctor.Medical.Core
 {
     public class DiseaseRepository : IDiseaseRepository
     {
-        private readonly SmartDoctor_DiseasesContext _context;
+        private readonly SmartDoctor_MedicalContext _context;
 
-        public DiseaseRepository(SmartDoctor_DiseasesContext context)
+        public DiseaseRepository(SmartDoctor_MedicalContext context)
         {
             _context = context;
         }

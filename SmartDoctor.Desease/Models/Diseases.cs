@@ -1,5 +1,7 @@
-﻿
-namespace SmartDoctor.Testing.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace SmartDoctor.Medical.Models
 {
     public partial class Diseases
     {

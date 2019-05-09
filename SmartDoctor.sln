@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartDoctor.Testing", "Smar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartDoctor.Web", "SmartDoctor.Web\SmartDoctor.Web.csproj", "{98A3936A-7E01-4E7F-BE06-A4A522C38CFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartDoctor.Desease", "SmartDoctor.Desease\SmartDoctor.Desease.csproj", "{9242971F-00F3-41CA-8607-AAD8602E6341}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartDoctor.Medical", "SmartDoctor.Desease\SmartDoctor.Medical.csproj", "{9242971F-00F3-41CA-8607-AAD8602E6341}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartDoctor.User", "SmartDoctor.User\SmartDoctor.User.csproj", "{7D454BFA-96B7-4552-9D91-37B0F6DD26E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{9242971F-00F3-41CA-8607-AAD8602E6341}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9242971F-00F3-41CA-8607-AAD8602E6341}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9242971F-00F3-41CA-8607-AAD8602E6341}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D454BFA-96B7-4552-9D91-37B0F6DD26E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D454BFA-96B7-4552-9D91-37B0F6DD26E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D454BFA-96B7-4552-9D91-37B0F6DD26E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D454BFA-96B7-4552-9D91-37B0F6DD26E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
