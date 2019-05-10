@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SmartDoctor.Web</title>
+    <title>@ViewData["Title"] - SmartDoctor</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <environment include="Development">
@@ -33,6 +33,7 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="User" asp-action="Patients">Patient management</a></li>
                     <li><a asp-area="" asp-controller="Test" asp-action="GetTest">Evaluate disease</a></li>
                 </ul>
             </div>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartDoctor.Testing.Models
+namespace SmartDoctor.Data.ContextModels
 {
     public partial class Answers
     {

@@ -1,5 +1,6 @@
-﻿using SmartDoctor.Data.Enums;
-using SmartDoctor.User.Models;
+﻿using SmartDoctor.Data.ContextModels;
+using SmartDoctor.Data.Enums;
+using SmartDoctor.Data.JsonModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,12 +8,13 @@ namespace SmartDoctor.User.Core
 {
     public interface IUserRepository
     {
-        Task Registration(Users user);
-        Task UpdateUserData(Users user);
+        Task Registration(PatientModel user);
+        //Task UpdateUserData(PatientModel user);
         Task RemoveUser(long userId);
-        Task<bool> Authorize(string phoneNumber, string password);
+        Task<Users> Authorize(string phoneNumber, string password);
         Task<Users> GetUserById(long id);
         Task<IEnumerable<Users>> GetUsers();
+        Task<IEnumerable<PatientModel>> GetPatients();
         Task<RoleTypes> GetRole(string phoneNumber);
     }
 }

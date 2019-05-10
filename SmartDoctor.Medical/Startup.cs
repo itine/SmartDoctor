@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SmartDoctor.Data.ContextModels;
 using SmartDoctor.Medical.Core;
-using SmartDoctor.Medical.Models;
 
 namespace SmartDoctor.Desease
 {

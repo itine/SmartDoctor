@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RestSharp;
+using SmartDoctor.Data.ContextModels;
 using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
-using SmartDoctor.Medical.Models;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartDoctor.Medical.Core

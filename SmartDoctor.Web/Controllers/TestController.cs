@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SmartDoctor.Data.ContextModels;
 using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
-using SmartDoctor.Testing.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

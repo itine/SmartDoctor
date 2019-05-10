@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace SmartDoctor.Medical.Models
+namespace SmartDoctor.Data.ContextModels
 {
     public partial class OutpatientCards
     {

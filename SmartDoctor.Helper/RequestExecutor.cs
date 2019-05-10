@@ -43,8 +43,15 @@ namespace SmartDoctor.Helper
         public static KeyValuePair<string, Method> PassTheTest = new KeyValuePair<string, Method>($"/{Scope.PassTheTest}", Method.POST);
         public static KeyValuePair<string, Method> GetQuestions = new KeyValuePair<string, Method>($"/{Scope.GetQuestions}", Method.GET);
         public static KeyValuePair<string, Method> GetAnswers = new KeyValuePair<string, Method>($"/{Scope.GetAnswers}", Method.GET);
-        public static KeyValuePair<string, Method> GetDiseaseNameById = new KeyValuePair<string, Method>($"/{GetDiseaseNameById}", Method.POST);
-        public static KeyValuePair<string, Method> EvaluateAnswer = new KeyValuePair<string, Method>($"/{EvaluateAnswer}", Method.POST);
+        public static KeyValuePair<string, Method> GetDiseaseNameById = new KeyValuePair<string, Method>($"/{Scope.GetDiseaseNameById}", Method.POST);
+        public static KeyValuePair<string, Method> EvaluateAnswer = new KeyValuePair<string, Method>($"/{Scope.EvaluateAnswer}", Method.POST);
+        public static KeyValuePair<string, Method> GetUserById = new KeyValuePair<string, Method>($"/{Scope.GetUserById}", Method.GET);
+        public static KeyValuePair<string, Method> GetUsers = new KeyValuePair<string, Method>($"/{Scope.GetUserById}", Method.GET);
+        public static KeyValuePair<string, Method> GetPatients = new KeyValuePair<string, Method>($"/{Scope.GetPatients}", Method.GET);
+        public static KeyValuePair<string, Method> Authorize = new KeyValuePair<string, Method>($"/{Scope.Authorize}", Method.POST);
+        public static KeyValuePair<string, Method> Registration = new KeyValuePair<string, Method>($"/{Scope.Registration}", Method.POST);
+        public static KeyValuePair<string, Method> RemoveUser = new KeyValuePair<string, Method>($"/{Scope.RemoveUser}", Method.POST);
+        public static KeyValuePair<string, Method> UpdatePatientInfo = new KeyValuePair<string, Method>($"/{Scope.UpdatePatientInfo}", Method.POST);
     }
 
     /// <summary>
@@ -53,9 +60,11 @@ namespace SmartDoctor.Helper
     public enum MicroservicesEnum
     {
         [StringValue("50001")]
-        Disease,
+        Medical,
         [StringValue("50002")]
-        Testing
+        Testing,
+        [StringValue("50003")]
+        User
     }
 
 }

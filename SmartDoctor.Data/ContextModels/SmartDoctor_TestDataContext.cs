@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace SmartDoctor.Testing.Models
+namespace SmartDoctor.Data.ContextModels
 {
     public partial class SmartDoctor_TestDataContext : DbContext
     {

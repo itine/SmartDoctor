@@ -8,5 +8,12 @@
         public const string GetAnswers = "GetAnswers";
         public const string GetDiseaseNameById = "GetDiseaseNameById";
         public const string EvaluateAnswer = "EvaluateAnswer";
+        public const string GetUserById = "GetUserById";
+        public const string GetUsers = "GetUsers";
+        public const string GetPatients = "GetPatients";
+        public const string Authorize = "Authorize";
+        public const string Registration = "Registration";
+        public const string RemoveUser = "RemoveUser";
+        public const string UpdatePatientInfo = "UpdatePatientInfo";
     }
 }

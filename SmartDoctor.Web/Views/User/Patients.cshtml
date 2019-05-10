@@ -1,0 +1,205 @@
+﻿
+@{
+    ViewData["Title"] = "Patients management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using SmartDoctor.Data.JsonModels;
+@model IEnumerable<PatientModel>
+
+<div id="user-list">
+    <h2>Patients:</h2>
+    <hr />
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>FIO</th>
+            <th>Phone number</th>
+            <th>Work place</th>
+            <th>Gender</th>
+            <th>Date of birth</th>
+            <th>Password</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (var user in Model)
+        {
+        <tr>
+            <td>
+                <input class="text" type="text" hidden="hidden" style="width:170px;" id="idTextBox" value="@user.UserId" />
+                <input class="text" type="text" style="width:170px;height:33px;" id="fioTextBox" value="@user.Fio" />
+            </td>
+            <td>
+                <input type="text" style="height:33px;" id="phoneNumberTextBox" value="@user.PhoneNumber" />
+            </td>
+            <td>
+                <input type="text" style="height:33px;" id="workPlaceTextBox" value="@user.WorkPlace" />
+            </td>
+            <td>
+                <input type="text" style="height:33px;" id="genderTextBox" min="0" step="1" value="@user.Gender" />
+            </td>
+            <td>
+                <input type="text" style="height:33px;" id="dateBirthTextBox" min="0" step="1" value="@user.DateBirth" />
+            </td>
+
+            <td>
+                <input type="text" style="height:33px;" id="passwordTextBox" min="0" step="1" value="@user.Password" />
+            </td>
+            <td>
+                @*<button style="width: 75px; height: 25px;" class="mySuccess" id="updateUser" onclick="onClickUpdateUser(this.id)">Обновить</button>*@
+                <button style="width: 75px; height: 25px;" class="myDanger" id="deleteUser" onclick="onClickDeleteUser(this.id)">Удалить</button>
+            </td>
+        </tr>
+        }
+    </table>
+</div>
+<script type="text/javascript">
+    var UIelements = ["idTextBox", "fioTextBox", "phoneNumberTextBox", "workPlaceTextBox", "genderTextBox", "dateBirthTextBox", "passwordTextBox", "updateUser", "deleteUser"];
+
+    function getSecondPart(str) {
+        return str.split('_')[1];
+    }
+
+    $(document).ready(function () {
+        for (i = 0; i < UIelements.length; i++) {
+            var elementsById = document.querySelectorAll('[id=' + UIelements[i] + ']');
+            for (j = 0; j < elementsById.length; j++) {
+                var newID = UIelements[i] + "_" + j;
+                $(elementsById[j]).attr('id', newID);
+            }
+        }
+    });
+
+    function getRowData(rowId) {
+        return {
+            "UserId": $("#idTextBox_" + rowId).val(),
+            "Fio": $("#fioTextBox_" + rowId).val(),
+            "DateBirth": $("#dateBirthTextBox_" + rowId).val(),
+            "WorkPlace": $("#workPlaceTextBox_" + rowId).val(),
+            "Gender": $("#genderTextBox_" + rowId).val(),
+            "PhoneNumber": $("#phoneNumberTextBox_" + rowId).val(),
+            "Password": $("#passwordTextBox_" + rowId).val()
+        }
+    }
+
+ 
+    function validatePass(val) {
+        if (val.trim() === "") {
+            alert("Укажите пароль");
+            return false;
+        }
+        if (val !== "") {
+            if (val.length < 8) {
+                alert("Пожалуйста, укажите пароль длиннее 8 символов");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function validatePhone(val) {
+        if (val.trim() === "") {
+            alert("Укажите номер");
+            return false;
+        }
+        if (val !== "") {
+            if (!(/^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/.test(val))) {
+                alert("Пожалуйста, укажите правильное значение номер телефона. Примеры: \n89103123167, 7-910-221-22-22, +7(910)-221-22-22");
+                return false;
+            }
+        }
+        return true;
+    }
+    function validateDecimal(val) {
+        if (val.trim() === "") {
+            alert("Укажите значения");
+            return false;
+        }
+        if (val !== "") {
+            if (!(/^\d*(?:\,\d{0,4})?$/.test(val))) {
+                alert("Пожалуйста, укажите правильные значения нецелочисленных полей");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function validateString(val) {
+        if (val.trim() === "") {
+            alert("Укажите значения");
+            return false;
+        }
+        return true;
+    }
+
+    function validateInt(val) {
+        if (val.trim() === "") {
+            alert("Укажите значения");
+            return false;
+        }
+        if (val !== "") {
+            if (!(/^\d+$/.test(val))) {
+                alert("Пожалуйста, укажите правильные значения целочисленных полей");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function validateFio(val) {
+        if (val.trim() === "") {
+            alert("Укажите фио");
+            return false;
+        }
+        if (val !== "") {
+            if (!(/^([А-ЯA-Z]|[А-ЯA-Z][\x27а-яa-z]{1,}|[А-ЯA-Z][\x27а-яa-z]{1,}\-([А-ЯA-Z][\x27а-яa-z]{1,}|(оглы)|(кызы)))\040[А-ЯA-Z][\x27а-яa-z]{1,}(\040[А-ЯA-Z][\x27а-яa-z]{1,})?$/.test(val))) {
+                alert("Пожалуйста, укажите правильное значение ФИО");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function onClickUpdateUser(longId) {
+        var rowId = getSecondPart(longId);
+        var rowData = getRowData(rowId);
+        if (!validateInt(rowData.PersonId) || !validateFio(rowData.Fio) || !validatePhone(rowData.PhoneNumber) ||
+            !validateString(rowData.Address) || !validateDecimal(rowData.Balance))
+        {
+            return;
+        }
+        var urlPath = '@Url.Action("UpdateUser", "Person")';
+          $.ajax({
+              type: "POST",
+              data: rowData,
+              dataType: "json",
+              url: urlPath,
+              success: function () {
+                  location.reload();
+                  alert("Пользователь обновлен");
+              },
+              error: function () {
+                  alert("error");
+              }
+            });
+    }
+
+    function onClickDeleteUser(longId) {
+        var rowId = getSecondPart(longId);
+        var userId = getRowData(rowId).UserId;
+        var urlPath = '@Url.Action("DeleteUser", "User")';
+        $.ajax({
+            type: "POST",
+            data: {
+                "userId": userId
+            },
+              dataType: "json",
+              url: urlPath,
+              success: function () {
+                  location.reload();
+                  alert("User deleted");
+              },
+              error: function () {
+                  alert("error");
+              }
+            });
+    }
+
+</script>

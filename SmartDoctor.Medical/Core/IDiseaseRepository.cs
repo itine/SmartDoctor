@@ -1,5 +1,4 @@
-﻿
-using SmartDoctor.Medical.Models;
+﻿using SmartDoctor.Data.ContextModels;
 using System.Threading.Tasks;
 
 namespace SmartDoctor.Medical.Core

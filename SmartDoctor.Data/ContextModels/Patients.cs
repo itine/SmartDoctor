@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-
-namespace SmartDoctor.User.Models
+namespace SmartDoctor.Data.ContextModels
 {
     public partial class Patients
     {
@@ -11,5 +9,6 @@ namespace SmartDoctor.User.Models
         public string WorkPlace { get; set; }
         public bool Gender { get; set; }
         public string SpecificNumber { get; set; }
+        public long UserId { get; set; }
     }
 }

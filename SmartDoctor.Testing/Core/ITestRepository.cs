@@ -1,5 +1,5 @@
-﻿using SmartDoctor.Data.Models;
-using SmartDoctor.Testing.Models;
+﻿using SmartDoctor.Data.ContextModels;
+using SmartDoctor.Data.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

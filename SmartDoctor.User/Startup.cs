@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-//using SmartDoctor.User.Models;
+using SmartDoctor.Data.ContextModels;
+using SmartDoctor.User.Core;
 
 namespace SmartDoctor.User
 {
@@ -28,9 +29,9 @@ namespace SmartDoctor.User
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            //services.AddDbContext<SmartDoctor_UsersContext>(options => options
-            //  .UseSqlServer(Configuration.GetConnectionString("LocalDB")));
-            //services.AddScoped<IDiseaseRepository, DiseaseRepository>();
+            services.AddDbContext<SmartDoctor_UsersContext>(options => options
+              .UseSqlServer(Configuration.GetConnectionString("LocalDB")));
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

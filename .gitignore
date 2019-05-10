@@ -227,3 +227,4 @@ SmartDoctor.User/obj/Debug/netcoreapp2.1/SmartDoctor.User.csproj.CopyComplete
 SmartDoctor.User/bin/Debug/netcoreapp2.1/SmartDoctor.User.dll
 SmartDoctor.User/bin/Debug/netcoreapp2.1/SmartDoctor.User.deps.json
 SmartDoctor.User/bin/Debug/netcoreapp2.1/SmartDoctor.User.pdb
+SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/User/Patients.g.cshtml.cs

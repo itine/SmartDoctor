@@ -9,9 +9,9 @@ using Accord.Statistics.Filters;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RestSharp;
+using SmartDoctor.Data.ContextModels;
 using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
-using SmartDoctor.Testing.Models;
 
 namespace SmartDoctor.Testing.Core
 {
@@ -69,7 +69,7 @@ namespace SmartDoctor.Testing.Core
                 for (var i = 0; i < answerArr.Length; i++)
                     patient[questions[i].Text] = answerArr[i];
                 var diseaseResponse = await RequestExecutor.ExecuteRequestAsync(
-                    MicroservicesEnum.Disease, RequestUrl.GetDiseaseNameById,
+                    MicroservicesEnum.Medical, RequestUrl.GetDiseaseNameById,
                         new Parameter[] {
                             new Parameter("diseaseId", (int)trainningAnswer.DeseaseId.Value, ParameterType.RequestBody)
                         });

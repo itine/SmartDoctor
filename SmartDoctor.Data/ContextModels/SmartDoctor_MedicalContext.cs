@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace SmartDoctor.Medical.Models
+namespace SmartDoctor.Data.ContextModels
 {
     public partial class SmartDoctor_MedicalContext : DbContext
     {

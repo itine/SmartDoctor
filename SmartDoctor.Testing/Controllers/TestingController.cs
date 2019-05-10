@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SmartDoctor.Data.Consts;
+using SmartDoctor.Data.ContextModels;
 using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
 using SmartDoctor.Testing.Core;
@@ -60,7 +61,7 @@ namespace SmartDoctor.Testing.Controllers
         {
             try
             {
-                await _testRepository.EvaluateAnswer(new Models.Answers { });
+                await _testRepository.EvaluateAnswer(new Answers { });
                 return Json(
                       new
                       {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartDoctor.User.Models
+namespace SmartDoctor.Data.ContextModels
 {
     public partial class Users
     {

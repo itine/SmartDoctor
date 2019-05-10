@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SmartDoctor.Web.Core;
 
 namespace SmartDoctor.Web
 {
@@ -28,11 +29,12 @@ namespace SmartDoctor.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-               .AddCookie(options => 
-               {
-                   options.LoginPath = new PathString("/Person/Login");
-               });
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //   .AddCookie(options => 
+            //   {
+            //       options.LoginPath = new PathString("/Person/Login");
+            //   });
+            services.AddScoped<IControllerRepository, ControllerRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SmartDoctor.Testing.Models
+﻿
+namespace SmartDoctor.Data.ContextModels
 {
     public partial class Questions
     {
