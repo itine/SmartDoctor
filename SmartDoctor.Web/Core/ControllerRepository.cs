@@ -13,6 +13,16 @@ namespace SmartDoctor.Web.Core
 {
     public class ControllerRepository : IControllerRepository
     {
+        public long GetUserId(ClaimsPrincipal claimsPrincipal)
+        {
+            var identity = (ClaimsIdentity)claimsPrincipal.Identity;
+            if (identity.Claims.Any())
+            {
+                var userId = identity.Claims.ToList()[0].Value;
+                return long.Parse(userId);
+            }
+            throw new Exception("Please log in");
+        }
 
         public async Task<RoleTypes> InitRole(ClaimsPrincipal claimsPrincipal)
         {

@@ -36,7 +36,7 @@ namespace SmartDoctor.Testing.Core
             return questions;
         }
 
-        public async Task<long> PassTest(AnswerModel answerModel)
+        public async Task PassTest(AnswerModel answerModel)
         {
             var userResponse = await RequestExecutor.ExecuteRequestAsync(
                 MicroservicesEnum.User, RequestUrl.GetPatientByUserId,
@@ -47,7 +47,8 @@ namespace SmartDoctor.Testing.Core
             if (!patientData.Success)
                 throw new Exception(patientData.Data);
             var patientCtx = JsonConvert.DeserializeObject<Patients>(patientData.Data);
-            var answerData = string.Join(';', answerModel.Answers);
+            var stringArr = answerModel.Answers.Select(x => x.Answer);
+            var answerData = string.Join(';', stringArr);
             var answer = new Answers
             {
                 AnswerData = answerData,
@@ -57,7 +58,6 @@ namespace SmartDoctor.Testing.Core
             };
             _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
-            return answer.AnswerId;
         }
 
         public async Task EvaluateAnswer(long answerId)

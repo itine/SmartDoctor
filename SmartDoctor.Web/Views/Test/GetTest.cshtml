@@ -42,20 +42,20 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function () {
-        var UIelements = ["question", "answer"];
-        for (i = 0; i < UIelements.length; i++) {
-            var elementsById = document.querySelectorAll('[id=' + UIelements[i] + ']');
-            for (j = 0; j < elementsById.length; j++) {
-                var newID = UIelements[i] + "_" + j;
-                $(elementsById[j]).attr('id', newID);
-            }
-        }
-    });
+    //$(document).ready(function () {
+    //    var UIelements = ["question", "answer"];
+    //    for (i = 0; i < UIelements.length; i++) {
+    //        var elementsById = document.querySelectorAll('[id=' + UIelements[i] + ']');
+    //        for (j = 0; j < elementsById.length; j++) {
+    //            var newID = UIelements[i] + "_" + j;
+    //            $(elementsById[j]).attr('id', newID);
+    //        }
+    //    }
+    //});
 
     function validateString(val) {
-        if (val.trim() === "") {
-            alert("Укажите значения");
+        if (val == undefined || val.trim() === "") {
+            alert("enter answers");
             return false;
         }
         return true;
@@ -65,29 +65,29 @@
         var result = [];
         var answers = document.querySelectorAll('[id=answer]');
         for (j = 0; j < answers.length; j++) {
-            var answer = $(answers[j].value.toString()).selector;
-            if (!validateString(defect)) {
-                return;
+            var answer = answers[j].value;
+            if (!validateString(answer)) {
+                return result;
             }
             result.push({
-                "Answer": answer
+                answer
             });
         }
         return result;
     }
    
     function onClickPassTheTestButton() {
+
         debugger;
         var answers = getAnswers();
-        var patient = @ViewBag.PatientId;
+        if (answers.length < 1)
+            return;
         var urlPath = '@Url.Action("PassTheTest", "Test")';
         $.ajax({
             type: "POST",
             url: urlPath,
-            data: {
-                "PatientId": patient,
-                "Answers": answers
-            },
+            data: JSON.stringify(
+                { "Answers": answers }),
             dataType: "html",
             success: function (data) {
             },

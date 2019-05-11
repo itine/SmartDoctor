@@ -7,5 +7,6 @@ namespace SmartDoctor.Web.Core
     public interface IControllerRepository
     {
         Task<RoleTypes> InitRole(ClaimsPrincipal claimsPrincipal);
+        long GetUserId(ClaimsPrincipal claimsPrincipal);
     }
 }

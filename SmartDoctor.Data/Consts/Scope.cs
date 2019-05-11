@@ -18,5 +18,7 @@
         public const string Registration = "Registration";
         public const string RemoveUser = "RemoveUser";
         public const string UpdatePatientInfo = "UpdatePatientInfo";
+        public const string IncludeTestToCalculations = "IncludeTestToCalculations";
+        
     }
 }
