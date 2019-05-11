@@ -29,11 +29,11 @@ namespace SmartDoctor.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //   .AddCookie(options => 
-            //   {
-            //       options.LoginPath = new PathString("/Person/Login");
-            //   });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(options =>
+               {
+                   options.LoginPath = new PathString("/User/Login");
+               });
             services.AddScoped<IControllerRepository, ControllerRepository>();
         }
 

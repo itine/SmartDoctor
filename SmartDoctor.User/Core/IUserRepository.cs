@@ -9,7 +9,7 @@ namespace SmartDoctor.User.Core
     public interface IUserRepository
     {
         Task Registration(PatientModel user);
-        //Task UpdateUserData(PatientModel user);
+        Task UpdateUserData(PatientModel user);
         Task RemoveUser(long userId);
         Task<Users> Authorize(string phoneNumber, string password);
         Task<Users> GetUserById(long id);

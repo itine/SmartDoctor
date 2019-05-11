@@ -13,7 +13,7 @@ namespace SmartDoctor.Data.JsonModels
         public string Fio { get; set; }
 
         [Required, JsonProperty("DateBirth")]
-        public DateTime DateBirth { get; set; }
+        public string DateBirth { get; set; }
 
         [Required, JsonProperty("WorkPlace")]
         public string WorkPlace { get; set; }
@@ -22,7 +22,7 @@ namespace SmartDoctor.Data.JsonModels
         public string Gender { get; set; }
         
         [Required, JsonProperty("PhoneNumber")]
-        [Phone]
+        //[Phone]
         public string PhoneNumber { get; set; }
 
         [Required, JsonProperty("Password")]

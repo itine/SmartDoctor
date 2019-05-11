@@ -36,10 +36,10 @@ namespace SmartDoctor.Web.Controllers
         {
             var role = await _controllerRepository.InitRole(User);
             ViewBag.Role = role;
-            //if (role == RoleTypes.None)
-            //    return RedirectToAction("Login", "User");
-            //if (role == RoleTypes.Patient)
-            //    return RedirectToAction("Index", "Home");
+            if (role == RoleTypes.None)
+                return RedirectToAction("Login", "User");
+            if (role == RoleTypes.Patient)
+                return RedirectToAction("Index", "Home");
             var userResponse = JsonConvert.DeserializeObject<MksResponse>(
                await RequestExecutor.ExecuteRequestAsync(
                    MicroservicesEnum.User, RequestUrl.GetPatients));
@@ -60,8 +60,7 @@ namespace SmartDoctor.Web.Controllers
                 var userResponse = JsonConvert.DeserializeObject<MksResponse>(
                     await RequestExecutor.ExecuteRequestAsync(
                         MicroservicesEnum.User, RequestUrl.Authorize, new Parameter[] {
-                            new Parameter("phoneNumber", model.PhoneNumber, ParameterType.GetOrPost),
-                            new Parameter("password", model.Password, ParameterType.GetOrPost)
+                            new Parameter("model", JsonConvert.SerializeObject(model), ParameterType.RequestBody)
                         }));
                 var user = new Users();
                 if (userResponse.Success)
@@ -85,11 +84,11 @@ namespace SmartDoctor.Web.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             ViewBag.Role = await _controllerRepository.InitRole(User);
-            return RedirectToAction("Login", "Person");
+            return RedirectToAction("Login", "User");
         }
 
         [HttpGet]
-        public async Task<IActionResult> Register()
+        public async Task<IActionResult> Registration()
         {
             ViewBag.Role = await _controllerRepository.InitRole(User);
             return View();
@@ -97,7 +96,7 @@ namespace SmartDoctor.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(PatientModel model)
+        public async Task<IActionResult> Registration(PatientModel model)
         {
             try
             {
@@ -108,7 +107,7 @@ namespace SmartDoctor.Web.Controllers
                         }));
                 if (!userResponse.Success)
                     throw new Exception(userResponse.Data);
-                await Authenticate(model.PhoneNumber);
+                await Authenticate(model.UserId);
                 ViewBag.Role = await _controllerRepository.InitRole(User);
                 return RedirectToAction("Index", "Home");
             }
@@ -128,31 +127,31 @@ namespace SmartDoctor.Web.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> UpdatePatient([FromBody] PatientModel model)
-        //{
-        //    try
-        //    {
-        //        var userResponse = JsonConvert.DeserializeObject<MksResponse>(
-        //          await RequestExecutor.ExecuteRequestAsync(
-        //              MicroservicesEnum.User, RequestUrl.UpdatePatientInfo, new Parameter[] {
-        //                    new Parameter("model", model, ParameterType.RequestBody)
-        //              }));
-        //        if (!userResponse.Success)
-        //            throw new Exception(userResponse.Data);
-        //        return Json(
-        //              new
-        //              {
-        //                  Success = true,
-        //                  Data = "Ok"
-        //              });
+        [HttpPost]
+        public async Task<IActionResult> UpdatePatient(PatientModel model)
+        {
+            try
+            {
+                var userResponse = JsonConvert.DeserializeObject<MksResponse>(
+                  await RequestExecutor.ExecuteRequestAsync(
+                      MicroservicesEnum.User, RequestUrl.UpdatePatientInfo, new Parameter[] {
+                            new Parameter("model", JsonConvert.SerializeObject(model), ParameterType.RequestBody)
+                      }));
+                if (!userResponse.Success)
+                    throw new Exception(userResponse.Data);
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = "Ok"
+                      });
 
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        return Json(new { Success = false, exception.Message });
-        //    }
-        //}
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string userId)

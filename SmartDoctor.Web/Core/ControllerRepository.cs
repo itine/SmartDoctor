@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -23,8 +23,10 @@ namespace SmartDoctor.Web.Core
                 var userResponse = JsonConvert.DeserializeObject<MksResponse>(await RequestExecutor.ExecuteRequestAsync(
                    MicroservicesEnum.User, RequestUrl.GetUserById,
                        new Parameter[] {
-                            new Parameter("userId", long.Parse(userId), ParameterType.RequestBody)
+                            new Parameter("userId", long.Parse(userId), ParameterType.GetOrPost)
                        }));
+                if (!userResponse.Success)
+                    throw new Exception(userResponse.Data);
                 var user = JsonConvert.DeserializeObject<Users>(userResponse.Data);
                 return (RoleTypes)user.Role;
             }

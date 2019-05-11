@@ -1,0 +1,107 @@
+﻿@model SmartDoctor.Data.JsonModels.PatientModel
+<center>
+    <h2>Patient registration</h2>
+    <form asp-action="Registration" asp-controller="User" asp-anti-forgery="true">
+        <div class="validation" asp-validation-summary="ModelOnly" />
+        <div>
+            <div>
+                <label asp-for="Fio">FIO</label><br />
+                <input id="fioTbx" type="text" asp-for="Fio" />
+                <span asp-validation-for="Fio" />
+            </div>
+            <br />
+            <div>
+                <label asp-for="PhoneNumber">Phone number</label><br />
+                <input id="phoneTbx" type="text" asp-for="PhoneNumber" />
+                <span asp-validation-for="PhoneNumber" />
+            </div>
+            <br />
+            <div>
+                <label asp-for="DateBirth">Date of birth</label><br />
+                <input type="text" asp-for="DateBirth" />
+                <span asp-validation-for="DateBirth" />
+            </div>
+            <br />
+            <div>
+                <label asp-for="WorkPlace">Work place</label><br />
+                <input type="text" asp-for="WorkPlace" />
+                <span asp-validation-for="WorkPlace" />
+            </div>
+            <br />
+            <div>
+                <label asp-for="Gender">Gender</label><br />
+                <input type="text" asp-for="Gender" />
+                <span asp-validation-for="Gender" />
+            </div>
+            <br />
+            <div>
+                <label asp-for="Password">Password</label><br />
+                <input id="passTextbox" asp-for="Password" />
+                <span asp-validation-for="Password" />
+            </div>
+            <br />
+            <div>
+                <input hidden="hidden" value="0" type="text" asp-for="UserId" />
+                <span hidden="hidden" asp-validation-for="UserId" />
+            </div>
+            <br />
+            <div>
+                <input id="successBtn" class="mySuccess" style="width: 176px; height: 30px;" type="submit" value="Регистрация" />
+            </div>
+        </div>
+    </form>
+</center>
+<script>
+
+    $("#successBtn").mouseover(function () {
+        var fio = $("#fioTbx").val();
+        var phone = $("#phoneTbx").val();
+        var pass = $("#passTextbox").val();
+        validateFio(fio);
+        validatePhone(phone);
+        validatePass(pass);
+    });
+
+    function validatePass(val) {
+        if (val.trim() === "") {
+            alert("Укажите пароль");
+            return false;
+        }
+        if (val !== "") {
+            if (val.length < 8) {
+                alert("Пожалуйста, укажите пароль длиннее 8 символов");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function validatePhone(val) {
+        if (val.trim() === "") {
+            alert("Укажите номер");
+            return false;
+        }
+        if (val !== "") {
+            if (!(/^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/.test(val))) {
+                alert("Пожалуйста, укажите правильное значение номер телефона. Примеры: \n89103123167, 7-910-221-22-22, +7(910)-221-22-22");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function validateFio(val) {
+        if (val.trim() === "") {
+            alert("Укажите фио");
+            return false;
+        }
+        if (val !== "") {
+            if (!(/^([А-ЯA-Z]|[А-ЯA-Z][\x27а-яa-z]{1,}|[А-ЯA-Z][\x27а-яa-z]{1,}\-([А-ЯA-Z][\x27а-яa-z]{1,}|(оглы)|(кызы)))\040[А-ЯA-Z][\x27а-яa-z]{1,}(\040[А-ЯA-Z][\x27а-яa-z]{1,})?$/.test(val))) {
+                alert("Пожалуйста, укажите правильное значение ФИО");
+                return false;
+            }
+        }
+        return true;
+    }
+
+</script>

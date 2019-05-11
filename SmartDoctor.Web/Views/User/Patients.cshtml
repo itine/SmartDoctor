@@ -43,7 +43,7 @@
                 <input type="text" style="height:33px;" id="passwordTextBox" min="0" step="1" value="@user.Password" />
             </td>
             <td>
-                @*<button style="width: 75px; height: 25px;" class="mySuccess" id="updateUser" onclick="onClickUpdateUser(this.id)">Обновить</button>*@
+                <button style="width: 75px; height: 25px;" class="mySuccess" id="updateUser" onclick="onClickUpdateUser(this.id)">Обновить</button>
                 <button style="width: 75px; height: 25px;" class="myDanger" id="deleteUser" onclick="onClickDeleteUser(this.id)">Удалить</button>
             </td>
         </tr>
@@ -158,14 +158,15 @@
     }
 
     function onClickUpdateUser(longId) {
+        debugger;
         var rowId = getSecondPart(longId);
         var rowData = getRowData(rowId);
-        if (!validateInt(rowData.PersonId) || !validateFio(rowData.Fio) || !validatePhone(rowData.PhoneNumber) ||
-            !validateString(rowData.Address) || !validateDecimal(rowData.Balance))
+        if (!validateInt(rowData.UserId) || !validateFio(rowData.Fio) || !validatePhone(rowData.PhoneNumber) ||
+            !validateString(rowData.WorkPlace))
         {
             return;
         }
-        var urlPath = '@Url.Action("UpdateUser", "Person")';
+        var urlPath = '@Url.Action("UpdatePatient", "User")';
           $.ajax({
               type: "POST",
               data: rowData,
@@ -173,7 +174,7 @@
               url: urlPath,
               success: function () {
                   location.reload();
-                  alert("Пользователь обновлен");
+                  alert("User updated!");
               },
               error: function () {
                   alert("error");

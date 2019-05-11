@@ -52,8 +52,8 @@ namespace SmartDoctor.User.Controllers
             }
         }
 
-        [HttpPost(Scope.Authorize)]
-        public async Task<IActionResult> Authorize(string phoneNumber, string password)
+        [HttpGet(Scope.GetUserById)]
+        public async Task<IActionResult> GetUserById(long userId)
         {
             try
             {
@@ -61,7 +61,25 @@ namespace SmartDoctor.User.Controllers
                       new
                       {
                           Success = true,
-                          Data = JsonConvert.SerializeObject(await _userRepository.Authorize(phoneNumber, password))
+                          Data = JsonConvert.SerializeObject(await _userRepository.GetUserById(userId))
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
+
+        [HttpPost(Scope.Authorize)]
+        public async Task<IActionResult> Authorize([FromBody] AuthModel model)
+        {
+            try
+            {
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = JsonConvert.SerializeObject(await _userRepository.Authorize(model.PhoneNumber, model.Password))
                       });
             }
             catch (Exception exception)
@@ -89,24 +107,24 @@ namespace SmartDoctor.User.Controllers
             }
         }
 
-        //[HttpPost(Scope.UpdatePatientInfo)]
-        //public async Task<IActionResult> UpdatePatientInfo([FromBody]PatientModel model)
-        //{
-        //    try
-        //    {
-        //        await _userRepository.UpdateUserData(model);
-        //        return Json(
-        //              new
-        //              {
-        //                  Success = true,
-        //                  Data = "ok"
-        //              });
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        return Json(new { Success = false, exception.Message });
-        //    }
-        //}
+        [HttpPost(Scope.UpdatePatientInfo)]
+        public async Task<IActionResult> UpdatePatientInfo([FromBody]PatientModel model)
+        {
+            try
+            {
+                await _userRepository.UpdateUserData(model);
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = "ok"
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
 
         [HttpPost(Scope.RemoveUser)]
         public async Task<IActionResult> RemoveUser([FromBody]long userId)
