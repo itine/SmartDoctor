@@ -29,7 +29,16 @@ namespace SmartDoctor.Medical.Core
             return null;
         }
 
-        public async Task<string> GetDeseaseNameById(int diseaseId)
+        public async Task<long> GetDiseaseIdByName(string name)
+        {
+            var disease = await _context.Diseases.FirstOrDefaultAsync(x => x.Name == name);
+            if (disease == null)
+                throw new Exception("Disease not found");
+            return disease.DiseaseId;
+        }
+        
+
+        public async Task<string> GetDiseaseNameById(long diseaseId)
         {
             var disease = await _context.Diseases.FirstOrDefaultAsync(x => x.DiseaseId == diseaseId);
             if (disease == null)

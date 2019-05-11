@@ -43,9 +43,12 @@ namespace SmartDoctor.Helper
         public static KeyValuePair<string, Method> PassTheTest = new KeyValuePair<string, Method>($"/{Scope.PassTheTest}", Method.POST);
         public static KeyValuePair<string, Method> GetQuestions = new KeyValuePair<string, Method>($"/{Scope.GetQuestions}", Method.GET);
         public static KeyValuePair<string, Method> GetAnswers = new KeyValuePair<string, Method>($"/{Scope.GetAnswers}", Method.GET);
-        public static KeyValuePair<string, Method> GetDiseaseNameById = new KeyValuePair<string, Method>($"/{Scope.GetDiseaseNameById}", Method.POST);
+        public static KeyValuePair<string, Method> GetDiseaseNameById = new KeyValuePair<string, Method>($"/{Scope.GetDiseaseNameById}", Method.GET);
+        public static KeyValuePair<string, Method> GetDiseaseIdByName = new KeyValuePair<string, Method>($"/{Scope.GetDiseaseIdByName}", Method.GET);
         public static KeyValuePair<string, Method> EvaluateAnswer = new KeyValuePair<string, Method>($"/{Scope.EvaluateAnswer}", Method.POST);
         public static KeyValuePair<string, Method> GetUserById = new KeyValuePair<string, Method>($"/{Scope.GetUserById}", Method.GET);
+        public static KeyValuePair<string, Method> GetPatientById = new KeyValuePair<string, Method>($"/{Scope.GetPatientById}", Method.GET);
+        public static KeyValuePair<string, Method> GetPatientByUserId = new KeyValuePair<string, Method>($"/{Scope.GetPatientByUserId}", Method.GET);
         public static KeyValuePair<string, Method> GetUsers = new KeyValuePair<string, Method>($"/{Scope.GetUserById}", Method.GET);
         public static KeyValuePair<string, Method> GetPatients = new KeyValuePair<string, Method>($"/{Scope.GetPatients}", Method.GET);
         public static KeyValuePair<string, Method> Authorize = new KeyValuePair<string, Method>($"/{Scope.Authorize}", Method.POST);

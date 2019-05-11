@@ -10,6 +10,7 @@ namespace SmartDoctor.Testing.Core
         Task<IEnumerable<Questions>> GetQuestions();
         Task<long> PassTest(AnswerModel answer);
         Task<IEnumerable<Answers>> GetAnswers();
-        Task EvaluateAnswer(Answers answer);
+        Task EvaluateAnswer(long answerId);
+        Task IncludeTestToCalculations(long answerId);
     }
 }

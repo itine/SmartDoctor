@@ -26,7 +26,7 @@ namespace SmartDoctor.Testing.Core
 
         public async Task<IEnumerable<Answers>> GetAnswers() =>
             await _context.Answers
-                .Where( x=> x.IsTakenToCalculate.HasValue && x.IsTakenToCalculate.Value).ToListAsync();
+                .Where(x => x.IsTakenToCalculate.HasValue && x.IsTakenToCalculate.Value).ToListAsync();
 
         public async Task<IEnumerable<Questions>> GetQuestions()
         {
@@ -38,43 +38,70 @@ namespace SmartDoctor.Testing.Core
 
         public async Task<long> PassTest(AnswerModel answerModel)
         {
+            var userResponse = await RequestExecutor.ExecuteRequestAsync(
+                MicroservicesEnum.User, RequestUrl.GetPatientByUserId,
+                    new Parameter[] {
+                            new Parameter("userId", answerModel.UserId, ParameterType.GetOrPost)
+                    });
+            var patientData = JsonConvert.DeserializeObject<MksResponse>(userResponse);
+            if (!patientData.Success)
+                throw new Exception(patientData.Data);
+            var patientCtx = JsonConvert.DeserializeObject<Patients>(patientData.Data);
             var answerData = string.Join(';', answerModel.Answers);
             var answer = new Answers
             {
                 AnswerData = answerData,
                 AnswerDate = DateTime.UtcNow,
                 IsTakenToCalculate = false,
-                PatientId = answerModel.PatientId
+                PatientId = patientCtx.PatientId
             };
             _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
             return answer.AnswerId;
         }
 
-        public async Task EvaluateAnswer(Answers answer)
+        public async Task EvaluateAnswer(long answerId)
         {
-            answer = await _context.Answers.LastOrDefaultAsync();
+            var answer = await _context.Answers.FirstOrDefaultAsync(x => x.AnswerId == answerId);
+            if (answer == null)
+                throw new Exception("Answer not foung");
             var data = new DataTable("Define the disease");
             var questions = (await GetQuestions()).ToArray();
+            var questionsLength = questions.Length + 2;
             var answers = await GetAnswers();
             foreach (var question in questions)
                 data.Columns.Add(new DataColumn(question.Text, typeof(string)));
+            data.Columns.Add(new DataColumn("Age category", typeof(string)));
+            data.Columns.Add(new DataColumn("Gender", typeof(string)));
             data.Columns.Add(new DataColumn("Diagnosed Disease", typeof(string)));
-            foreach(var trainningAnswer in answers)
+            foreach (var trainningAnswer in answers)
             {
                 var answerArr = trainningAnswer.AnswerData.Split(';');
-                if (answerArr.Length != questions.Length)
+                if (answerArr.Length != questionsLength)
                     throw new Exception("Answers count must be equals questions count");
                 var patient = data.NewRow();
                 for (var i = 0; i < answerArr.Length; i++)
                     patient[questions[i].Text] = answerArr[i];
-                var diseaseResponse = await RequestExecutor.ExecuteRequestAsync(
-                    MicroservicesEnum.Medical, RequestUrl.GetDiseaseNameById,
+                var userResponse = await RequestExecutor.ExecuteRequestAsync(
+                    MicroservicesEnum.User, RequestUrl.GetPatientById,
                         new Parameter[] {
-                            new Parameter("diseaseId", (int)trainningAnswer.DeseaseId.Value, ParameterType.RequestBody)
+                            new Parameter("patientId", (int)trainningAnswer.PatientId.Value, ParameterType.GetOrPost)
                         });
-                var diseaseName = JsonConvert.DeserializeObject<MksResponse>(diseaseResponse);
-                patient["Diagnosed Disease"] = diseaseName.Data;
+                var patientData = JsonConvert.DeserializeObject<MksResponse>(userResponse);
+                if (!patientData.Success)
+                    throw new Exception(patientData.Data);
+                var patientCtx = JsonConvert.DeserializeObject<Patients>(patientData.Data);
+                patient["Age category"] = new AgeLimit((byte)Math.Round((DateTime.UtcNow - patientCtx.DateBirth).TotalDays / 365.2425));
+                patient["Gender"] = patientCtx.Gender;
+                var diseaseResponseName = await RequestExecutor.ExecuteRequestAsync(
+                   MicroservicesEnum.Medical, RequestUrl.GetDiseaseNameById,
+                       new Parameter[] {
+                            new Parameter("diseaseId", (int)trainningAnswer.DeseaseId.Value, ParameterType.GetOrPost)
+                       });
+                var diseaseNameResponse = JsonConvert.DeserializeObject<MksResponse>(diseaseResponseName);
+                if (!diseaseNameResponse.Success)
+                    throw new Exception(diseaseNameResponse.Data);
+                patient["Diagnosed Disease"] = JsonConvert.DeserializeObject<string>(diseaseNameResponse.Data);
                 data.Rows.Add(patient);
             }
             var codification = new Codification(data);
@@ -84,9 +111,9 @@ namespace SmartDoctor.Testing.Core
             var decisionTreeLearningAlgorithm = new ID3Learning { };
             var decisionTree = decisionTreeLearningAlgorithm.Learn(input, predictions);
             var answerArray = answer.AnswerData.Split(';');
-            if (answerArray.Length != questions.Length)
+            if (answerArray.Length != questionsLength)
                 throw new Exception("Answers count must be equals questions count");
-            var inputValues = new string [questions.Length, 2];
+            var inputValues = new string[questions.Length, 2];
             for (var i = 0; i < answerArray.Length; i++)
             {
                 inputValues[i, 0] = questions[i].Text;
@@ -95,8 +122,25 @@ namespace SmartDoctor.Testing.Core
             var query = codification.Transform(inputValues);
             var result = decisionTree.Decide(query);
             var diagnosis = codification.Revert("Diagnosed Disease", result);
+            var diseaseIdResponse = await RequestExecutor.ExecuteRequestAsync(
+                   MicroservicesEnum.Medical, RequestUrl.GetDiseaseIdByName,
+                       new Parameter[] {
+                            new Parameter("name", result, ParameterType.GetOrPost)
+                       });
+            var diseaseResponseId = JsonConvert.DeserializeObject<MksResponse>(diseaseIdResponse);
+            if (!diseaseResponseId.Success)
+                throw new Exception(diseaseResponseId.Data);
+            answer.DeseaseId = long.Parse(diseaseResponseId.Data);
+            await _context.SaveChangesAsync();
+        }
 
-            Console.WriteLine($"Diagnosed disease: {diagnosis}"); 
+        public async Task IncludeTestToCalculations(long answerId)
+        {
+            var answer = await _context.Answers.FirstOrDefaultAsync(x => x.AnswerId == answerId);
+            if (answer == null)
+                throw new Exception("Answer not foung");
+            answer.IsTakenToCalculate = true;
+            await _context.SaveChangesAsync();
         }
     }
 }

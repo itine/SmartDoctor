@@ -7,8 +7,11 @@
         public const string PassTheTest = "PassTheTest";
         public const string GetAnswers = "GetAnswers";
         public const string GetDiseaseNameById = "GetDiseaseNameById";
+        public const string GetDiseaseIdByName = "GetDiseaseIdByName";
         public const string EvaluateAnswer = "EvaluateAnswer";
         public const string GetUserById = "GetUserById";
+        public const string GetPatientById = "GetPatientById";
+        public const string GetPatientByUserId = "GetPatientByUserId";
         public const string GetUsers = "GetUsers";
         public const string GetPatients = "GetPatients";
         public const string Authorize = "Authorize";

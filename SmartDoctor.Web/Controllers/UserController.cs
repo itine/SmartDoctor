@@ -172,31 +172,5 @@ namespace SmartDoctor.Web.Controllers
                 return Json(new { Success = false, exception.Message });
             }
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> GetUserById([FromBody]UserByIdModel model)
-        //{
-        //    try
-        //    {
-        //        var userResponse = JsonConvert.DeserializeObject<MksResponse>(
-        //             await RequestExecutor.ExecuteRequestAsync(
-        //                 MicroservicesEnum.User, RequestUrl.RemoveUser, new Parameter[] {
-        //                    new Parameter("userId", long.Parse(userId), ParameterType.RequestBody)
-        //                 }));
-        //        if (!userResponse.Success)
-        //            throw new Exception(userResponse.Data);
-        //        return Json(
-        //              new
-        //              {
-        //                  Success = true,
-        //                  Data = JsonConvert.SerializeObject(await _personsRepository.GetPersonById(model.Id))
-        //              });
-
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        return Json(new { Success = false, exception.Message });
-        //    }
-        //}
     }
 }

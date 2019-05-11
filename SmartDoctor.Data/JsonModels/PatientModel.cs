@@ -19,10 +19,9 @@ namespace SmartDoctor.Data.JsonModels
         public string WorkPlace { get; set; }
 
         [Required, JsonProperty("Gender")]
-        public string Gender { get; set; }
-        
+        public string Gender { get; set; }       
+
         [Required, JsonProperty("PhoneNumber")]
-        //[Phone]
         public string PhoneNumber { get; set; }
 
         [Required, JsonProperty("Password")]

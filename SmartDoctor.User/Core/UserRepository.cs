@@ -2,6 +2,7 @@
 using SmartDoctor.Data.ContextModels;
 using SmartDoctor.Data.Enums;
 using SmartDoctor.Data.JsonModels;
+using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
 using System;
 using System.Collections.Generic;
@@ -99,6 +100,21 @@ namespace SmartDoctor.User.Core
             return user;
         }
 
+        public async Task<Patients> GetPatientById(long id)
+        {
+            var patient = await _context.Patients.FirstOrDefaultAsync(x => x.PatientId == id);
+            if (patient == null)
+                throw new Exception("Patient not found");
+            return patient;
+        }
+
+        public async Task<Patients> GetPatientByUserId(long id)
+        {
+            var patient = await _context.Patients.FirstOrDefaultAsync(x => x.UserId == id);
+            if (patient == null)
+                throw new Exception("Patient not found");
+            return patient;
+        }
         public async Task<IEnumerable<Users>> GetUsers()
         {
             return await _context.Users.ToListAsync();

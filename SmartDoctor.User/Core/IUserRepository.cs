@@ -13,6 +13,8 @@ namespace SmartDoctor.User.Core
         Task RemoveUser(long userId);
         Task<Users> Authorize(string phoneNumber, string password);
         Task<Users> GetUserById(long id);
+        Task<Patients> GetPatientById(long id);
+        Task<Patients> GetPatientByUserId(long id);
         Task<IEnumerable<Users>> GetUsers();
         Task<IEnumerable<PatientModel>> GetPatients();
         Task<RoleTypes> GetRole(string phoneNumber);
