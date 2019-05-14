@@ -19,7 +19,43 @@ namespace SmartDoctor.Web.Controllers
             _controllerRepository = controllerRepository;
         }
 
-        public IActionResult Index() => View();
+        public async Task<IActionResult> Index()
+        {
+            var userId = _controllerRepository.GetUserId(User);
+            var testingResponse = JsonConvert.DeserializeObject<MksResponse>(
+               await RequestExecutor.ExecuteRequestAsync(
+                   MicroservicesEnum.Testing, RequestUrl.CheckNotViewedAnswer, new Parameter[]{
+                           new Parameter("userId", userId, ParameterType.RequestBody)
+                       }));
+            if (!testingResponse.Success)
+                throw new Exception(testingResponse.Data);
+            var result = JsonConvert.DeserializeObject<bool>(testingResponse.Data);
+            if (result)
+                return RedirectToAction("AlreadyHasCompleteTest", "Test");
+            return View();
+        }
+
+        public async Task<IActionResult> AlreadyHasCompleteTest()
+        {
+            var userId = _controllerRepository.GetUserId(User);
+            var testingResponse = JsonConvert.DeserializeObject<MksResponse>(
+               await RequestExecutor.ExecuteRequestAsync(
+                   MicroservicesEnum.Testing, RequestUrl.GetPreDiseaseId, new Parameter[]{
+                           new Parameter("userId", userId, ParameterType.GetOrPost)
+                       }));
+            if (!testingResponse.Success)
+                throw new Exception(testingResponse.Data);
+            var diseaseId = JsonConvert.DeserializeObject<long>(testingResponse.Data);
+            var medicalResponse = JsonConvert.DeserializeObject<MksResponse>(
+               await RequestExecutor.ExecuteRequestAsync(
+                   MicroservicesEnum.Medical, RequestUrl.GetDiseaseNameById, new Parameter[]{
+                           new Parameter("diseaseId", (int)diseaseId, ParameterType.RequestBody)
+                       }));
+            if (!medicalResponse.Success)
+                throw new Exception(medicalResponse.Data);
+            ViewBag.PreDiagnos = medicalResponse.Data;
+            return View();
+        }
 
         public async Task<IActionResult> GetTest()
         {
@@ -46,11 +82,33 @@ namespace SmartDoctor.Web.Controllers
                            new Parameter("model", new AnswerModel
                            {
                                UserId = userId,
-                               Answers = answers
+                              // Answers = answers
                            }, ParameterType.RequestBody)}));
                 if (!testingResponse.Success)
                     throw new Exception(testingResponse.Data);
                 return RedirectToAction("Index", "Test");
+            }
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(nameof(exception), exception.ToString());
+                throw;
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TryAgain()
+        {
+            try
+            {
+                var userId = _controllerRepository.GetUserId(User);
+                var testingResponse = JsonConvert.DeserializeObject<MksResponse>(
+                   await RequestExecutor.ExecuteRequestAsync(
+                       MicroservicesEnum.Testing, RequestUrl.RemoveAnswer, new Parameter[]{
+                           new Parameter("userId", userId, ParameterType.GetOrPost)
+                           }));
+                if (!testingResponse.Success)
+                    throw new Exception(testingResponse.Data);
+                return RedirectToAction("GetTest", "Test");
             }
             catch (Exception exception)
             {

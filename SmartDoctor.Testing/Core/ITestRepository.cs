@@ -12,5 +12,8 @@ namespace SmartDoctor.Testing.Core
         Task<IEnumerable<Answers>> GetAnswers();
         Task EvaluateAnswer(long answerId);
         Task IncludeTestToCalculations(long answerId);
+        Task<bool> CheckNotViewedAnswer(long userId);
+        Task RemoveAnswer(long userId);
+        Task<long> GetPreDiseaseId(long userId);
     }
 }

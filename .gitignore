@@ -231,3 +231,4 @@ SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/User/Patients.g.cshtml.cs
 SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/User/Registration.g.cshtml.cs
 SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/User/Login.g.cshtml.cs
 SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/Test/Index.g.cshtml.cs
+SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/Test/AlreadyHasCompleteTest.g.cshtml.cs

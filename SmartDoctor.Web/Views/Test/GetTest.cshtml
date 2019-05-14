@@ -85,10 +85,8 @@
         var urlPath = '@Url.Action("PassTheTest", "Test")';
         $.ajax({
             type: "POST",
+            data: answers,
             url: urlPath,
-            data: JSON.stringify(
-                { "Answers": answers }),
-            dataType: "html",
             success: function (data) {
             },
             error: function () {

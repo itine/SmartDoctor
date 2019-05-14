@@ -53,7 +53,6 @@ namespace SmartDoctor.Testing.Core
             {
                 AnswerData = answerData,
                 AnswerDate = DateTime.UtcNow,
-                IsTakenToCalculate = false,
                 PatientId = patientCtx.PatientId
             };
             _context.Answers.Add(answer);
@@ -141,6 +140,59 @@ namespace SmartDoctor.Testing.Core
                 throw new Exception("Answer not foung");
             answer.IsTakenToCalculate = true;
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> CheckNotViewedAnswer(long userId)
+        {
+            var userResponse = await RequestExecutor.ExecuteRequestAsync(
+                   MicroservicesEnum.User, RequestUrl.GetPatientByUserId,
+                       new Parameter[] {
+                            new Parameter("userId", userId, ParameterType.GetOrPost)
+                       });
+            var patientData = JsonConvert.DeserializeObject<MksResponse>(userResponse);
+            if (!patientData.Success)
+                throw new Exception(patientData.Data);
+            var patientCtx = JsonConvert.DeserializeObject<Patients>(patientData.Data);
+            return await _context.Answers.AnyAsync(x => x.PatientId.HasValue
+                && x.PatientId.Value == patientCtx.PatientId && !x.IsTakenToCalculate.HasValue);
+        }
+
+        public async Task RemoveAnswer(long userId)
+        {
+            var userResponse = await RequestExecutor.ExecuteRequestAsync(
+                  MicroservicesEnum.User, RequestUrl.GetPatientByUserId,
+                      new Parameter[] {
+                            new Parameter("userId", userId, ParameterType.GetOrPost)
+                      });
+            var patientData = JsonConvert.DeserializeObject<MksResponse>(userResponse);
+            if (!patientData.Success)
+                throw new Exception(patientData.Data);
+            var patientCtx = JsonConvert.DeserializeObject<Patients>(patientData.Data);
+            var answer = await _context.Answers.FirstOrDefaultAsync(x => !x.IsTakenToCalculate.HasValue
+                && x.PatientId.HasValue && x.PatientId == patientCtx.PatientId);
+            if (answer != null)
+            {
+                _context.Answers.Remove(answer);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<long> GetPreDiseaseId(long userId)
+        {
+            var userResponse = await RequestExecutor.ExecuteRequestAsync(
+                  MicroservicesEnum.User, RequestUrl.GetPatientByUserId,
+                      new Parameter[] {
+                            new Parameter("userId", userId, ParameterType.GetOrPost)
+                      });
+            var patientData = JsonConvert.DeserializeObject<MksResponse>(userResponse);
+            if (!patientData.Success)
+                throw new Exception(patientData.Data);
+            var patientCtx = JsonConvert.DeserializeObject<Patients>(patientData.Data);
+            var answer = await _context.Answers.FirstOrDefaultAsync(x => !x.IsTakenToCalculate.HasValue
+              && x.PatientId.HasValue && x.PatientId == patientCtx.PatientId && x.DeseaseId.HasValue);
+            if (answer == null)
+                throw new Exception("answer not found");
+            return answer.DeseaseId.Value;
         }
     }
 }

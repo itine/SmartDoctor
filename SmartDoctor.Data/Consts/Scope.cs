@@ -19,6 +19,8 @@
         public const string RemoveUser = "RemoveUser";
         public const string UpdatePatientInfo = "UpdatePatientInfo";
         public const string IncludeTestToCalculations = "IncludeTestToCalculations";
-        
+        public const string CheckNotViewedAnswer = "CheckNotViewedAnswer";
+        public const string RemoveAnswer = "RemoveAnswer";
+        public const string GetPreDiseaseId = "GetPreDiseaseId";
     }
 }

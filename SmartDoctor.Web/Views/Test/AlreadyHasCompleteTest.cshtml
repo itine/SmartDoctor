@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Already has completed test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>You already has completed test.</h2>
+
+<hr />
+<center>
+    Your preliminary diagnosis is @ViewBag.PreDiagnos.
+    <br />
+    <button class="btn-danger" style="width: 150px; height: 30px;" id="tryAgainButton" onclick="onClickTryAgainButton()">Try again pass the test</button>
+    <br />
+    <button class="btn-success" style="width: 150px; height: 30px;" id="toDoctorButton" onclick="onClickToDoctorButton()">Doctor's appointment</button>
+    <br />
+</center>
+
+<script type="text/javascript">
+
+    function onClickTryAgainButton() {
+        var urlPath = '@Url.Action("TryAgain", "Test")';
+        $.ajax({
+            type: "POST",
+            url: urlPath,
+            dataType: "html",
+            success: function () {
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+
+    function onClickToDoctorButton() {
+        window.location.href = '@Url.Action("Index", "Home")';
+    }
+
+</script>

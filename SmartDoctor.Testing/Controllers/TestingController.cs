@@ -90,5 +90,62 @@ namespace SmartDoctor.Testing.Controllers
                 return Json(new { Success = false, exception.Message });
             }
         }
+
+        [HttpPost(Scope.CheckNotViewedAnswer)]
+        public async Task<IActionResult> CheckNotViewedAnswer([FromBody]int userId)
+        {
+            try
+            {
+                
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = await _testRepository.CheckNotViewedAnswer(userId)
+                       });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
+
+        [HttpGet(Scope.GetPreDiseaseId)]
+        public async Task<IActionResult> GetPreDiseaseId(int userId)
+        {
+            try
+            {
+
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = await _testRepository.GetPreDiseaseId(userId)
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
+
+        [HttpPost(Scope.RemoveAnswer)]
+        public async Task<IActionResult> RemoveAnswer(int userId)
+        {
+            try
+            {
+                await _testRepository.RemoveAnswer(userId);
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = "ok"
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
     }
 }
