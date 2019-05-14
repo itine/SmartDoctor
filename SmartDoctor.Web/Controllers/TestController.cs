@@ -19,6 +19,8 @@ namespace SmartDoctor.Web.Controllers
             _controllerRepository = controllerRepository;
         }
 
+        public IActionResult Index() => View();
+
         public async Task<IActionResult> GetTest()
         {
             var testingResponse = JsonConvert.DeserializeObject<MksResponse>(

@@ -1,0 +1,52 @@
+﻿@using SmartDoctor.Data.Enums
+
+@{
+    ViewData["Title"] = "Test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Test beginning</h2>
+<hr />
+<center>
+    <br />
+    What part of the body bothers you?
+    <br />
+    @{
+        var listItems = new List<SelectListItem>();
+        listItems.Add(new SelectListItem
+        {
+            Text = BodyPartEnum.Head.ToString(),
+            Value = BodyPartEnum.Head.ToString()
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = BodyPartEnum.Body.ToString(),
+            Value = BodyPartEnum.Body.ToString()
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = BodyPartEnum.Back.ToString(),
+            Value = BodyPartEnum.Back.ToString()
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = BodyPartEnum.Arms.ToString(),
+            Value = BodyPartEnum.Arms.ToString()
+        });
+        listItems.Add(new SelectListItem
+        {
+            Text = BodyPartEnum.Legs.ToString(),
+            Value = BodyPartEnum.Legs.ToString()
+        });
+    }
+    <br />
+    @Html.DropDownList("BodyPartDDL", listItems, null, new { @id = "bodyPartDDL", @class = "form-control", @style = "width: 150px;" })
+    <br />
+    <button class="btn-success" style="width: 150px; height: 30px;" id="choosePartButton" onclick="onClickChoosePartButton()">Choose</button>
+</center>
+
+<script type="text/javascript">
+    function onClickChoosePartButton() {
+        window.location.href = '@Url.Action("GetTest", "Test")';
+    }
+</script>
