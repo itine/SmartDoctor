@@ -1,6 +1,6 @@
 ﻿namespace SmartDoctor.Data.Enums
 {
-    public enum AgeLimitsEnum
+    public enum AgeLimitsEnum : byte
     {
         FirstChildhood = 0,
         SecondChildhood = 1,

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
+using SmartDoctor.Data.Consts;
 using SmartDoctor.Data.ContextModels;
 using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
@@ -49,7 +50,8 @@ namespace SmartDoctor.Web.Controllers
             var medicalResponse = JsonConvert.DeserializeObject<MksResponse>(
                await RequestExecutor.ExecuteRequestAsync(
                    MicroservicesEnum.Medical, RequestUrl.GetDiseaseNameById, new Parameter[]{
-                           new Parameter("diseaseId", (int)diseaseId, ParameterType.RequestBody)
+                           new Parameter(
+                               "diseaseId", diseaseId, ParameterType.GetOrPost)
                        }));
             if (!medicalResponse.Success)
                 throw new Exception(medicalResponse.Data);
@@ -71,7 +73,7 @@ namespace SmartDoctor.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PassTheTest(AnswerItem[] answers)
+        public async Task<IActionResult> PassTheTest([FromBody]AnswerItem[] answers)
         {
             try
             {
@@ -79,14 +81,21 @@ namespace SmartDoctor.Web.Controllers
                 var testingResponse = JsonConvert.DeserializeObject<MksResponse>(
                    await RequestExecutor.ExecuteRequestAsync(
                        MicroservicesEnum.Testing, RequestUrl.PassTheTest, new Parameter[]{
-                           new Parameter("model", new AnswerModel
+                           new Parameter("model", JsonConvert.SerializeObject(new AnswerModel
                            {
                                UserId = userId,
-                              // Answers = answers
-                           }, ParameterType.RequestBody)}));
+                               Answers = answers
+                           }), ParameterType.RequestBody)}));
                 if (!testingResponse.Success)
                     throw new Exception(testingResponse.Data);
-                return RedirectToAction("Index", "Test");
+                var answerId = long.Parse(testingResponse.Data);
+                var testingResponse2 = JsonConvert.DeserializeObject<MksResponse>(
+                   await RequestExecutor.ExecuteRequestAsync(
+                       MicroservicesEnum.Testing, RequestUrl.EvaluateAnswer, new Parameter[]{
+                           new Parameter("id", answerId, ParameterType.RequestBody) }));
+                if (!testingResponse2.Success)
+                    throw new Exception(testingResponse2.Data);
+                return Json(new { Result = true });
             }
             catch (Exception exception)
             {
@@ -104,11 +113,11 @@ namespace SmartDoctor.Web.Controllers
                 var testingResponse = JsonConvert.DeserializeObject<MksResponse>(
                    await RequestExecutor.ExecuteRequestAsync(
                        MicroservicesEnum.Testing, RequestUrl.RemoveAnswer, new Parameter[]{
-                           new Parameter("userId", userId, ParameterType.GetOrPost)
+                           new Parameter("userId", userId, ParameterType.RequestBody)
                            }));
                 if (!testingResponse.Success)
                     throw new Exception(testingResponse.Data);
-                return RedirectToAction("GetTest", "Test");
+                return Json(new { Result = true });
             }
             catch (Exception exception)
             {

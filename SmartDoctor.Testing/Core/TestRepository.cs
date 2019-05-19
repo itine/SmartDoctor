@@ -36,7 +36,7 @@ namespace SmartDoctor.Testing.Core
             return questions;
         }
 
-        public async Task PassTest(AnswerModel answerModel)
+        public async Task<long> PassTest(AnswerModel answerModel)
         {
             var userResponse = await RequestExecutor.ExecuteRequestAsync(
                 MicroservicesEnum.User, RequestUrl.GetPatientByUserId,
@@ -57,6 +57,7 @@ namespace SmartDoctor.Testing.Core
             };
             _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
+            return answer.AnswerId;
         }
 
         public async Task EvaluateAnswer(long answerId)
@@ -66,12 +67,12 @@ namespace SmartDoctor.Testing.Core
                 throw new Exception("Answer not foung");
             var data = new DataTable("Define the disease");
             var questions = (await GetQuestions()).ToArray();
-            var questionsLength = questions.Length + 2;
+            var questionsLength = questions.Length;
             var answers = await GetAnswers();
             foreach (var question in questions)
                 data.Columns.Add(new DataColumn(question.Text, typeof(string)));
-            data.Columns.Add(new DataColumn("Age category", typeof(string)));
-            data.Columns.Add(new DataColumn("Gender", typeof(string)));
+            data.Columns.Add(new DataColumn("Age category", typeof(byte)));
+            data.Columns.Add(new DataColumn("Gender", typeof(bool)));
             data.Columns.Add(new DataColumn("Diagnosed Disease", typeof(string)));
             foreach (var trainningAnswer in answers)
             {
@@ -90,12 +91,14 @@ namespace SmartDoctor.Testing.Core
                 if (!patientData.Success)
                     throw new Exception(patientData.Data);
                 var patientCtx = JsonConvert.DeserializeObject<Patients>(patientData.Data);
-                patient["Age category"] = new AgeLimit((byte)Math.Round((DateTime.UtcNow - patientCtx.DateBirth).TotalDays / 365.2425));
+                patient["Age category"] = (byte) new AgeLimit((byte)Math.Round((DateTime.UtcNow - patientCtx.DateBirth).TotalDays / 365.2425)).Limit;
                 patient["Gender"] = patientCtx.Gender;
                 var diseaseResponseName = await RequestExecutor.ExecuteRequestAsync(
                    MicroservicesEnum.Medical, RequestUrl.GetDiseaseNameById,
                        new Parameter[] {
-                            new Parameter("diseaseId", (int)trainningAnswer.DeseaseId.Value, ParameterType.GetOrPost)
+                            new Parameter("diseaseId", 
+                            trainningAnswer.DeseaseId.Value,
+                            ParameterType.GetOrPost)
                        });
                 var diseaseNameResponse = JsonConvert.DeserializeObject<MksResponse>(diseaseResponseName);
                 if (!diseaseNameResponse.Success)
@@ -124,7 +127,7 @@ namespace SmartDoctor.Testing.Core
             var diseaseIdResponse = await RequestExecutor.ExecuteRequestAsync(
                    MicroservicesEnum.Medical, RequestUrl.GetDiseaseIdByName,
                        new Parameter[] {
-                            new Parameter("name", result, ParameterType.GetOrPost)
+                            new Parameter("name", diagnosis, ParameterType.GetOrPost)
                        });
             var diseaseResponseId = JsonConvert.DeserializeObject<MksResponse>(diseaseIdResponse);
             if (!diseaseResponseId.Success)

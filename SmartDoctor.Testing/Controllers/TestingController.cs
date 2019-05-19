@@ -30,31 +30,31 @@ namespace SmartDoctor.Testing.Controllers
             }
             catch (Exception exception)
             {
-                return Json(new { Success = false, exception.Message });
+                return Json(new { Success = false, Data = exception.Message });
             }
         }
 
         [HttpPost(Scope.PassTheTest)]
-        public async Task<IActionResult> PassTheTest([FromBody]AnswerModel model)
+        public async Task<IActionResult> PassTheTest([FromBody] AnswerModel model)
         {
             try
             {
-                await _testRepository.PassTest(model);
+                var id = await _testRepository.PassTest(model);
                 return Json(
                     new
                     {
                         Success = true,
-                        Data = "ok"
+                        Data = id
                     });
             }
             catch (Exception exception)
             {
-                return Json(new { Success = false, exception.Message });
+                return Json(new { Success = false, Data = exception.Message });
             }
         }
 
         [HttpPost(Scope.EvaluateAnswer)]
-        public async Task<IActionResult> EvaluateAnswer(int id)
+        public async Task<IActionResult> EvaluateAnswer([FromBody] long id)
         {
             try
             {
@@ -68,12 +68,12 @@ namespace SmartDoctor.Testing.Controllers
             }
             catch (Exception exception)
             {
-                return Json(new { Success = false, exception.Message });
+                return Json(new { Success = false, Data = exception.Message });
             }
         }
 
         [HttpPost(Scope.IncludeTestToCalculations)]
-        public async Task<IActionResult> IncludeTestToCalculations(int id)
+        public async Task<IActionResult> IncludeTestToCalculations([FromBody]int id)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace SmartDoctor.Testing.Controllers
             }
             catch (Exception exception)
             {
-                return Json(new { Success = false, exception.Message });
+                return Json(new { Success = false, Data = exception.Message });
             }
         }
 
@@ -106,7 +106,7 @@ namespace SmartDoctor.Testing.Controllers
             }
             catch (Exception exception)
             {
-                return Json(new { Success = false, exception.Message });
+                return Json(new { Success = false, Data = exception.Message });
             }
         }
 
@@ -125,12 +125,12 @@ namespace SmartDoctor.Testing.Controllers
             }
             catch (Exception exception)
             {
-                return Json(new { Success = false, exception.Message });
+                return Json(new { Success = false, Data = exception.Message });
             }
         }
 
         [HttpPost(Scope.RemoveAnswer)]
-        public async Task<IActionResult> RemoveAnswer(int userId)
+        public async Task<IActionResult> RemoveAnswer([FromBody] int userId)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace SmartDoctor.Testing.Controllers
             }
             catch (Exception exception)
             {
-                return Json(new { Success = false, exception.Message });
+                return Json(new { Success = false, Data = exception.Message });
             }
         }
     }

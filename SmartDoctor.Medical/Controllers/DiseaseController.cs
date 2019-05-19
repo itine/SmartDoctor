@@ -35,8 +35,8 @@ namespace SmartDoctor.Medical.Controllers
             }
         }
 
-        [HttpPost(Scope.GetDiseaseNameById)]
-        public async Task<IActionResult> GetDiseaseNameById([FromBody] int diseaseId)
+        [HttpGet(Scope.GetDiseaseNameById)]
+        public async Task<IActionResult> GetDiseaseNameById(long diseaseId)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace SmartDoctor.Medical.Controllers
             }
         }
 
-        [HttpPost(Scope.GetDiseaseIdByName)]
+        [HttpGet(Scope.GetDiseaseIdByName)]
         public async Task<IActionResult> GetDiseaseIdByName(string name)
         {
             try

@@ -42,17 +42,6 @@
 
 <script type="text/javascript">
 
-    //$(document).ready(function () {
-    //    var UIelements = ["question", "answer"];
-    //    for (i = 0; i < UIelements.length; i++) {
-    //        var elementsById = document.querySelectorAll('[id=' + UIelements[i] + ']');
-    //        for (j = 0; j < elementsById.length; j++) {
-    //            var newID = UIelements[i] + "_" + j;
-    //            $(elementsById[j]).attr('id', newID);
-    //        }
-    //    }
-    //});
-
     function validateString(val) {
         if (val == undefined || val.trim() === "") {
             alert("enter answers");
@@ -70,24 +59,25 @@
                 return result;
             }
             result.push({
-                answer
+                 "Answer": answer
             });
         }
         return result;
     }
    
     function onClickPassTheTestButton() {
-
-        debugger;
         var answers = getAnswers();
         if (answers.length < 1)
             return;
         var urlPath = '@Url.Action("PassTheTest", "Test")';
         $.ajax({
             type: "POST",
-            data: answers,
+            data: JSON.stringify(answers),
             url: urlPath,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
             success: function (data) {
+                window.location.href = '@Url.Action("Index", "Home")';
             },
             error: function () {
                 alert("error");

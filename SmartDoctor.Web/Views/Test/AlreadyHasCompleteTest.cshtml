@@ -20,17 +20,16 @@
     function onClickTryAgainButton() {
         var urlPath = '@Url.Action("TryAgain", "Test")';
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: urlPath,
-            dataType: "html",
             success: function () {
+                window.location.href = '@Url.Action("Index", "Home")';
             },
             error: function () {
                 alert("error");
             }
         });
     }
-
 
     function onClickToDoctorButton() {
         window.location.href = '@Url.Action("Index", "Home")';
