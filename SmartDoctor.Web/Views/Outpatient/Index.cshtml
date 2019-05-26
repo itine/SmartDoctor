@@ -1,0 +1,105 @@
+﻿@{
+    ViewData["Title"] = "Outpatient list";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using SmartDoctor.Data.JsonModels;
+@using SmartDoctor.Data.Enums;
+@model IEnumerable<OutpatientModel>
+
+<h2>List of outpatient cards.</h2>
+
+<hr />
+<div id="outpatient-list">
+    <table class="table table-bordered table-responsive table-hover">
+        <tr>
+            <th>Patient FIO</th>
+            <th>Disease</th>
+            <th>Status</th>
+            <th>Description</th>
+        </tr>
+        @foreach (var card in Model)
+        {
+            <tr>
+                <td>
+                    <input class="text" type="text" hidden="hidden" style="width:170px;" id="idTextBox" value="@card.OutpatientCardId" />
+                    <input type="text" style="height:33px;" id="patientFioTextBox" value="@card.Patient.Fio" />
+                </td>
+                <td>
+                    <input type="text" style="height:33px;" id="diseaseTextBox" value="@card.Disease" />
+                </td>
+                <td>
+                    @{
+                        var listItems = new List<SelectListItem>();
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "Card creating",
+                            Value = ((int)OutpatientStatuses.OutpatientCardCreating).ToString()
+                        });
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "Doctor waiting",
+                            Value = ((int)OutpatientStatuses.DoctorWaiting).ToString()
+                        });
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "Doctor visit",
+                            Value = ((int)OutpatientStatuses.DoctorVisit).ToString()
+                        });
+                        listItems.Add(new SelectListItem
+                        {
+                            Text = "Data updating",
+                            Value = ((int)OutpatientStatuses.DataUpdating).ToString()
+                        });
+                        listItems.First(x => x.Value == ((int)card.Status).ToString()).Selected = true;
+                    }
+                    @Html.DropDownList("StatusDDL", listItems, null, new { @id = "statusDDL", @class = "form-control", @onchange = "OnChangeStatusDDL(this.value, this.id)" })
+                </td>
+                <td>
+                    <input type="text" style="height:33px;" id="descriptionTextBox" value="@card.Description" />
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<script type="text/javascript">
+
+    var UIelements = ["idTextBox", "statusDDL"];
+    
+    function getSecondPart(str) {
+        return str.split('_')[1];
+    }
+
+    $(document).ready(function () {
+        for (i = 0; i < UIelements.length; i++) {
+            var elementsById = document.querySelectorAll('[id=' + UIelements[i] + ']');
+            for (j = 0; j < elementsById.length; j++) {
+                var newID = UIelements[i] + "_" + j;
+                $(elementsById[j]).attr('id', newID);
+            }
+        }
+    })
+
+    
+    function OnChangeStatusDDL(val, id) {
+        var cardId = $("#idTextBox_" + getSecondPart(id)).val();
+        var urlPath = '@Url.Action("ChangeStatus", "Outpatient")';
+        $.ajax({
+            type: "POST",
+            data:
+            {
+                "CardId": cardId,
+                "Status": val
+            },
+            url: urlPath,
+            success: function () {
+                alert("Status updated");
+                location.reload();
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+
+</script>

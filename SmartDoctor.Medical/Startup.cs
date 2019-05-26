@@ -33,6 +33,7 @@ namespace SmartDoctor.Desease
               .UseSqlServer(Configuration.GetConnectionString("LocalDB")));
             services.AddScoped<IDiseaseRepository, DiseaseRepository>();
             services.AddScoped<IDrugRepository, DrugRepository>();
+            services.AddScoped<IOutpatientRepository, OutpatientRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

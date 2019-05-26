@@ -22,5 +22,8 @@
         public const string CheckNotViewedAnswer = "CheckNotViewedAnswer";
         public const string RemoveAnswer = "RemoveAnswer";
         public const string GetPreDiseaseId = "GetPreDiseaseId";
+        public const string GetOutpatients = "GetOutpatients";
+        public const string GetOutpatientById = "GetOutpatientById";
+        public const string ChangeCardStatus = "ChangeCardStatus";
     }
 }

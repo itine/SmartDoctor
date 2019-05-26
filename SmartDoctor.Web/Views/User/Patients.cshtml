@@ -158,7 +158,6 @@
     }
 
     function onClickUpdateUser(longId) {
-        debugger;
         var rowId = getSecondPart(longId);
         var rowData = getRowData(rowId);
         if (!validateInt(rowData.UserId) || !validateFio(rowData.Fio) || !validatePhone(rowData.PhoneNumber) ||

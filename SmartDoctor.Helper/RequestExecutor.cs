@@ -59,6 +59,9 @@ namespace SmartDoctor.Helper
         public static KeyValuePair<string, Method> CheckNotViewedAnswer = new KeyValuePair<string, Method>($"/{Scope.CheckNotViewedAnswer}", Method.POST);
         public static KeyValuePair<string, Method> RemoveAnswer = new KeyValuePair<string, Method>($"/{Scope.RemoveAnswer}", Method.POST);
         public static KeyValuePair<string, Method> GetPreDiseaseId = new KeyValuePair<string, Method>($"/{Scope.GetPreDiseaseId}", Method.GET);
+        public static KeyValuePair<string, Method> GetOutpatients = new KeyValuePair<string, Method>($"/{Scope.GetOutpatients}", Method.GET);
+        public static KeyValuePair<string, Method> GetOutpatientById = new KeyValuePair<string, Method>($"/{Scope.GetOutpatientById}", Method.GET);
+        public static KeyValuePair<string, Method> ChangeCardStatus = new KeyValuePair<string, Method>($"/{Scope.ChangeCardStatus}", Method.POST);
     }
 
     /// <summary>
