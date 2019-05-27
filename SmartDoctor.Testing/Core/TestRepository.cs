@@ -197,5 +197,10 @@ namespace SmartDoctor.Testing.Core
                 throw new Exception("answer not found");
             return answer.DeseaseId.Value;
         }
+
+        public long[] GetPatientsWithNoReception() =>
+            _context.Answers.Where(x => !x.IsTakenToCalculate.HasValue).Select(x => x.PatientId.Value).Distinct().ToArray();
+
+
     }
 }

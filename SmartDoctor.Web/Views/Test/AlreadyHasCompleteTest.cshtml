@@ -32,7 +32,17 @@
     }
 
     function onClickToDoctorButton() {
-        window.location.href = 'https://docs.google.com/spreadsheets/d/1qBhXPS5C1L0YLTwfGHs2O8-5M1HF9fEUsZFhELAL6wI/edit?usp=drive_web&ouid=104416324226562251123';
+        var urlPath = '@Url.Action("CreateCard", "Outpatient")';
+        $.ajax({
+            type: "GET",
+            url: urlPath,
+            success: function () {
+                window.location.href = 'https://docs.google.com/spreadsheets/d/1qBhXPS5C1L0YLTwfGHs2O8-5M1HF9fEUsZFhELAL6wI/edit?usp=drive_web&ouid=104416324226562251123';
+            },
+            error: function () {
+                alert("error");
+            }
+        });
     }
 
 </script>

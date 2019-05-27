@@ -88,6 +88,24 @@ namespace SmartDoctor.User.Controllers
             }
         }
 
+        [HttpGet(Scope.GetPatientByFio)]
+        public async Task<IActionResult> GetPatientByFio(string fio)
+        {
+            try
+            {
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = JsonConvert.SerializeObject(await _userRepository.GetPatientByFio(fio))
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
+
         [HttpGet(Scope.GetPatientByUserId)]
         public async Task<IActionResult> GetPatientByUserId(long userId)
         {
@@ -135,6 +153,24 @@ namespace SmartDoctor.User.Controllers
                       {
                           Success = true,
                           Data = "ok"
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
+
+        [HttpPost(Scope.GetPatientsByIds)]
+        public async Task<IActionResult> GetPatientsByIds([FromBody]long[] ids)
+        {
+            try
+            {
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = JsonConvert.SerializeObject(await _userRepository.GetPatientsByIds(ids))
                       });
             }
             catch (Exception exception)

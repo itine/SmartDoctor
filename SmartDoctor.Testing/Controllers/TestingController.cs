@@ -147,5 +147,24 @@ namespace SmartDoctor.Testing.Controllers
                 return Json(new { Success = false, Data = exception.Message });
             }
         }
+
+        [HttpGet(Scope.GetPatientsWithNoReception)]
+        public IActionResult GetPatientsWithNoReception()
+        {
+            try
+            {
+
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = JsonConvert.SerializeObject(_testRepository.GetPatientsWithNoReception())
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, Data = exception.Message });
+            }
+        }
     }
 }

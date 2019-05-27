@@ -9,5 +9,6 @@ namespace SmartDoctor.Medical.Core
         Task<IEnumerable<OutpatientModel>> GetAllOutPatients();
         Task<OutpatientModel> GetOutpatientById(long cardId);
         Task ChangeStatus(CardStatusModel model);
+        Task CreateOutpatientCard(long userId);
     }
 }

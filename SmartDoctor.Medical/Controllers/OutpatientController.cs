@@ -33,7 +33,7 @@ namespace SmartDoctor.Medical.Controllers
                 return Json(new { Success = false, exception.Message });
             }
         }
-
+        
         [HttpGet(Scope.GetOutpatientById)]
         public async Task<IActionResult> GetOutpatientById(long outpatientCardId)
         {
@@ -58,6 +58,25 @@ namespace SmartDoctor.Medical.Controllers
             try
             {
                 await _outpatientRepository.ChangeStatus(model);
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = "ok"
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
+
+        [HttpPost(Scope.CreateOutpatientCard)]
+        public async Task<IActionResult> CreateOutpatientCard([FromBody] long userId)
+        {
+            try
+            {
+                await _outpatientRepository.CreateOutpatientCard(userId);
                 return Json(
                       new
                       {

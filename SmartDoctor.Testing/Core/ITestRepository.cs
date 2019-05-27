@@ -15,5 +15,6 @@ namespace SmartDoctor.Testing.Core
         Task<bool> CheckNotViewedAnswer(long userId);
         Task RemoveAnswer(long userId);
         Task<long> GetPreDiseaseId(long userId);
+        long[] GetPatientsWithNoReception();
     }
 }

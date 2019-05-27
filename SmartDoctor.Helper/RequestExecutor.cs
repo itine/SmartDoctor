@@ -49,7 +49,7 @@ namespace SmartDoctor.Helper
         public static KeyValuePair<string, Method> GetUserById = new KeyValuePair<string, Method>($"/{Scope.GetUserById}", Method.GET);
         public static KeyValuePair<string, Method> GetPatientById = new KeyValuePair<string, Method>($"/{Scope.GetPatientById}", Method.GET);
         public static KeyValuePair<string, Method> GetPatientByUserId = new KeyValuePair<string, Method>($"/{Scope.GetPatientByUserId}", Method.GET);
-        public static KeyValuePair<string, Method> GetUsers = new KeyValuePair<string, Method>($"/{Scope.GetUserById}", Method.GET);
+        public static KeyValuePair<string, Method> GetUsers = new KeyValuePair<string, Method>($"/{Scope.GetUsers}", Method.GET);
         public static KeyValuePair<string, Method> GetPatients = new KeyValuePair<string, Method>($"/{Scope.GetPatients}", Method.GET);
         public static KeyValuePair<string, Method> Authorize = new KeyValuePair<string, Method>($"/{Scope.Authorize}", Method.POST);
         public static KeyValuePair<string, Method> Registration = new KeyValuePair<string, Method>($"/{Scope.Registration}", Method.POST);
@@ -62,6 +62,10 @@ namespace SmartDoctor.Helper
         public static KeyValuePair<string, Method> GetOutpatients = new KeyValuePair<string, Method>($"/{Scope.GetOutpatients}", Method.GET);
         public static KeyValuePair<string, Method> GetOutpatientById = new KeyValuePair<string, Method>($"/{Scope.GetOutpatientById}", Method.GET);
         public static KeyValuePair<string, Method> ChangeCardStatus = new KeyValuePair<string, Method>($"/{Scope.ChangeCardStatus}", Method.POST);
+        public static KeyValuePair<string, Method> GetPatientsWithNoReception = new KeyValuePair<string, Method>($"/{Scope.GetPatientsWithNoReception}", Method.GET);
+        public static KeyValuePair<string, Method> GetPatientByFio = new KeyValuePair<string, Method>($"/{Scope.GetPatientByFio}", Method.GET);
+        public static KeyValuePair<string, Method> CreateOutpatientCard = new KeyValuePair<string, Method>($"/{Scope.CreateOutpatientCard}", Method.POST);
+        public static KeyValuePair<string, Method> GetPatientsByIds = new KeyValuePair<string, Method>($"/{Scope.GetPatientsByIds}", Method.POST);
     }
 
     /// <summary>

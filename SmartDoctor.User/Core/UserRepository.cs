@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SmartDoctor.Data.ContextModels;
 using SmartDoctor.Data.Enums;
 using SmartDoctor.Data.JsonModels;
@@ -115,10 +116,8 @@ namespace SmartDoctor.User.Core
                 throw new Exception("Patient not found");
             return patient;
         }
-        public async Task<IEnumerable<Users>> GetUsers()
-        {
-            return await _context.Users.ToListAsync();
-        }
+        public async Task<IEnumerable<Users>> GetUsers() =>
+            await _context.Users.ToListAsync();
 
         public async Task<RoleTypes> GetRole(string phoneNumber)
         {
@@ -141,5 +140,71 @@ namespace SmartDoctor.User.Core
                        PhoneNumber = u.PhoneNumber,
                        WorkPlace = p.WorkPlace
                    }).ToListAsync();
+
+        public async Task<IEnumerable<PatientModel>> GetPatientsNoReception()
+        {
+            var testingResponse = await RequestExecutor.ExecuteRequestAsync(
+               MicroservicesEnum.Testing, RequestUrl.GetPatientsWithNoReception);
+            var answersData = JsonConvert.DeserializeObject<MksResponse>(testingResponse);
+            if (!answersData.Success)
+                throw new Exception(answersData.Data);
+            var patientsIds = JsonConvert.DeserializeObject<long[]>(answersData.Data);
+            var result = new List<PatientModel>();
+            if (patientsIds.Any())
+                foreach (var id in patientsIds)
+                {
+                    result.AddRange(await (from p in _context.Patients
+                           join u in _context.Users on p.UserId equals u.UserId
+                           where p.PatientId == id
+                           select new PatientModel
+                           {
+                               UserId = u.UserId.ToString(),
+                               DateBirth = p.DateBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+                               Fio = p.Fio,
+                               Gender = p.Gender ? "male" : "female",
+                               Password = u.Password,
+                               PhoneNumber = u.PhoneNumber,
+                               WorkPlace = p.WorkPlace
+                           }).ToListAsync());
+                }
+            return result;
+        }
+
+        public async Task<PatientModel> GetPatientByFio(string fio) =>
+            await (from p in _context.Patients
+                   join u in _context.Users on p.UserId equals u.UserId
+                   where p.Fio == fio
+                   select new PatientModel
+                   {
+                       UserId = u.UserId.ToString(),
+                       DateBirth = p.DateBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+                       Fio = p.Fio,
+                       Gender = p.Gender ? "male" : "female",
+                       Password = u.Password,
+                       PhoneNumber = u.PhoneNumber,
+                       WorkPlace = p.WorkPlace
+                   }).FirstOrDefaultAsync();
+
+        public async Task<IEnumerable<PatientModel>> GetPatientsByIds(long[] ids)
+        {
+            var result = new List<PatientModel>();
+            foreach(var id in ids)
+            {
+                var patient = await _context.Patients.FirstOrDefaultAsync(x => x.PatientId == id);
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == patient.UserId);
+                result.Add(new PatientModel
+                {
+                    UserId = user.UserId.ToString(),
+                    DateBirth = patient.DateBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    Fio = patient.Fio,
+                    Gender = patient.Gender ? "male" : "female",
+                    Password = user.Password,
+                    PhoneNumber = user.PhoneNumber,
+                    WorkPlace = patient.WorkPlace
+                });
+            }
+            return result;
+        }
+        
     }
 }

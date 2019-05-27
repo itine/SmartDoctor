@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,7 @@ namespace SmartDoctor.Medical.Core
                 throw new Exception($"Outpatient card not found. {model.CardId}");
             outpatientCard.Status = model.Status;
             await _context.SaveChangesAsync();
-        }
+        }    
 
         public async Task<IEnumerable<OutpatientModel>> GetAllOutPatients()
         {
@@ -39,13 +40,13 @@ namespace SmartDoctor.Medical.Core
                     result.Add(await GetOutpatientById(outpatient.OutpatientCardId));
             return result;
         }
-
+        
         public async Task<OutpatientModel> GetOutpatientById(long cardId)
         {
             var outpatient = await _context.OutpatientCards.FirstOrDefaultAsync(x => x.OutpatientCardId == cardId);
             var newOutpatient = new OutpatientModel
             {
-                CreatedDate = outpatient.CreatedDate.Value,
+                CreatedDate = outpatient.CreatedDate.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                 Description = outpatient.Description,
                 OutpatientCardId = outpatient.OutpatientCardId,
                 Status = (OutpatientStatuses)outpatient.Status
@@ -54,7 +55,7 @@ namespace SmartDoctor.Medical.Core
                MicroservicesEnum.User, RequestUrl.GetPatientById,
                    new Parameter[]
                    {
-                        new Parameter( "patientId", (int)outpatient.PatientId, ParameterType.GetOrPost)
+                        new Parameter("patientId", (int)outpatient.PatientId, ParameterType.GetOrPost)
                    });
             var patientData = JsonConvert.DeserializeObject<MksResponse>(userResponse);
             if (!patientData.Success)
@@ -71,6 +72,38 @@ namespace SmartDoctor.Medical.Core
                 throw new Exception(diseaseResponseName.Data);
             newOutpatient.Disease = JsonConvert.DeserializeObject<string>(diseaseResponseName.Data);
             return newOutpatient;
+        }
+
+        public async Task CreateOutpatientCard(long userId)
+        {
+            var userResponse = await RequestExecutor.ExecuteRequestAsync(
+               MicroservicesEnum.User, RequestUrl.GetUsers);
+            var userData = JsonConvert.DeserializeObject<MksResponse>(userResponse);
+            if (!userData.Success)
+                throw new Exception(userData.Data);
+            var users = JsonConvert.DeserializeObject<List<Users>>(userData.Data);
+            var freeDoctor = users.FirstOrDefault(x => x.Role == (byte)RoleTypes.Doctor);
+            if (freeDoctor == null)
+                throw new Exception("Free doctors not found");
+            var userResponse2 = await RequestExecutor.ExecuteRequestAsync(
+              MicroservicesEnum.User, RequestUrl.GetPatientByUserId, new Parameter[]
+                   {
+                        new Parameter("userId", (int)userId, ParameterType.GetOrPost)
+                   });
+            var userData2 = JsonConvert.DeserializeObject<MksResponse>(userResponse2);
+            if (!userData2.Success)
+                throw new Exception(userData2.Data);
+            var patient = JsonConvert.DeserializeObject<Patients>(userData2.Data);
+            var newOutpatientCard = new OutpatientCards
+            {
+                CreatedDate = DateTime.UtcNow,
+                Description = "Card created successfully",
+                DoctorId = freeDoctor.UserId,
+                PatientId = patient.PatientId,
+                Status = (byte)OutpatientStatuses.OutpatientCardCreating
+            };
+            _context.OutpatientCards.Add(newOutpatientCard);
+            await _context.SaveChangesAsync();
         }
     }
 }

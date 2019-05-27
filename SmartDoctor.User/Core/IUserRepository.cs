@@ -17,6 +17,8 @@ namespace SmartDoctor.User.Core
         Task<Patients> GetPatientByUserId(long id);
         Task<IEnumerable<Users>> GetUsers();
         Task<IEnumerable<PatientModel>> GetPatients();
+        Task<IEnumerable<PatientModel>> GetPatientsByIds(long[] ids);
         Task<RoleTypes> GetRole(string phoneNumber);
+        Task<PatientModel> GetPatientByFio(string fio);
     }
 }

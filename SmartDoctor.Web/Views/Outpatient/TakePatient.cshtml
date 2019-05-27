@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "Take a patient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Choose a patient</h2>
+<br />
+
+@Html.DropDownList("patientDDL",
+    new SelectList(ViewBag.Patients),
+    "Patient",
+    new { @id = "patientDDL", @style = "width: 178px; height: 30px;", @class = "form-control" })
+<br/>
+<button style="width: 150px; height: 30px;" class="btn" id="takeBtn" onclick="onClickTakeBtn()">Take</button>
+
+<script type="text/javascript">
+    
+    function onClickTakeBtn() {
+        var patient = $("#patientDDL").val();
+        var urlPath = '@Url.Action("ToReception", "Outpatient")';
+        $.ajax({
+            type: "POST",
+            data:
+            {
+                "Fio": patient
+            },
+            url: urlPath,
+            success: function () {
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+</script>
