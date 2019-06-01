@@ -26,7 +26,7 @@ namespace SmartDoctor.Testing.Core
 
         public async Task<IEnumerable<Answers>> GetAnswers() =>
             await _context.Answers
-                .Where(x => x.IsTakenToCalculate.HasValue && x.IsTakenToCalculate.Value).ToListAsync();
+                .Where(x => x.IsTakenToCalculate.HasValue && x.IsTakenToCalculate.Value && !x.PatientId.HasValue).ToListAsync();
 
         public async Task<IEnumerable<Questions>> GetQuestions()
         {
@@ -136,12 +136,17 @@ namespace SmartDoctor.Testing.Core
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Add to test data
+        /// </summary>
+        /// <param name="answerId"></param>
+        /// <returns></returns>
         public async Task IncludeTestToCalculations(long answerId)
         {
             var answer = await _context.Answers.FirstOrDefaultAsync(x => x.AnswerId == answerId);
             if (answer == null)
                 throw new Exception("Answer not foung");
-            answer.IsTakenToCalculate = true;
+            answer.IsTakenToCalculate = false;
             await _context.SaveChangesAsync();
         }
 

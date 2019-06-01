@@ -16,10 +16,11 @@
     <div id="questions-list">
         <h2>Questions:</h2>
         <hr />
-        <table id="questionsTable" class="table table-bordered table-responsive table-hover">
+        <table id="questionsTable" class="table table-responsive table-hover">
             <tr>
                 <th>Question</th>
-                <th>Your answer</th>
+                <th>Yes</th>
+                <th>No</th>
             </tr>
             @foreach (var question in Model)
             {
@@ -29,7 +30,10 @@
                     @question.Text?
                 </td>
                 <td width="10">
-                    <input style="width:auto;" type="text" id="answer" />
+                    <input style="width:auto;" type="radio" id="answer" />
+                </td>
+                <td width="10">
+                    <input checked="checked" style="width:auto;" type="radio" id="answer2" />
                 </td>
             </tr>
             }
@@ -41,23 +45,27 @@
 </body>
 
 <script type="text/javascript">
-
-    function validateString(val) {
-        if (val == undefined || val.trim() === "") {
-            alert("enter answers");
-            return false;
+    var UIelements = ["answer", "answer2"];
+    
+    $(document).ready(function () {
+        for (i = 0; i < UIelements.length; i++) {
+            var elementsById = document.querySelectorAll('[id=' + UIelements[i] + ']');
+            for (j = 0; j < elementsById.length; j++) {
+                var newID = UIelements[0] + "_" + j;
+                $(elementsById[j]).attr('name', newID);
+            }
         }
-        return true;
-    }
-
+    });
+    
     function getAnswers() {
         var result = [];
         var answers = document.querySelectorAll('[id=answer]');
         for (j = 0; j < answers.length; j++) {
-            var answer = answers[j].value;
-            if (!validateString(answer)) {
-                return result;
-            }
+            var answer = answers[j].checked;
+            if (answer == true)
+                answer = 'yes';
+            else
+                answer = 'no';
             result.push({
                  "Answer": answer
             });

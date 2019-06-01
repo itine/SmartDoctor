@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using SmartDoctor.Data.Consts;
 using SmartDoctor.Data.ContextModels;
+using SmartDoctor.Data.Enums;
 using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
 using SmartDoctor.Web.Core;
@@ -22,18 +23,23 @@ namespace SmartDoctor.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userId = _controllerRepository.GetUserId(User);
-            var testingResponse = JsonConvert.DeserializeObject<MksResponse>(
-               await RequestExecutor.ExecuteRequestAsync(
-                   MicroservicesEnum.Testing, RequestUrl.CheckNotViewedAnswer, new Parameter[]{
+            var role = await _controllerRepository.InitRole(User);
+            if (role == RoleTypes.Patient)
+            {
+                var userId = _controllerRepository.GetUserId(User);
+                var testingResponse = JsonConvert.DeserializeObject<MksResponse>(
+                   await RequestExecutor.ExecuteRequestAsync(
+                       MicroservicesEnum.Testing, RequestUrl.CheckNotViewedAnswer, new Parameter[]{
                            new Parameter("userId", userId, ParameterType.RequestBody)
-                       }));
-            if (!testingResponse.Success)
-                throw new Exception(testingResponse.Data);
-            var result = JsonConvert.DeserializeObject<bool>(testingResponse.Data);
-            if (result)
-                return RedirectToAction("AlreadyHasCompleteTest", "Test");
-            return View();
+                           }));
+                if (!testingResponse.Success)
+                    throw new Exception(testingResponse.Data);
+                var result = JsonConvert.DeserializeObject<bool>(testingResponse.Data);
+                if (result)
+                    return RedirectToAction("AlreadyHasCompleteTest", "Test");
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> AlreadyHasCompleteTest()
