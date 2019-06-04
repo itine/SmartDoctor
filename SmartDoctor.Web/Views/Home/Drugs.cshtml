@@ -6,8 +6,12 @@
 }
 
 <h2>Drugs</h2>
-
-<table class="table">
+<br />
+<div>
+    <input type="text" id="searchInput" onkeyup="onSearch()" placeholder="Enter name...">
+</div>
+<br />
+<table id="drugTable" class="table">
     <thead>
         <tr>
             <th>
@@ -29,24 +33,48 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Names[1].Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhaseOfDevelopment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ChemicalName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ChemicalClass)
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Names[1].Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhaseOfDevelopment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChemicalName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChemicalClass)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<script type="text/javascript">
+
+    function onSearch() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("drugTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+</script>

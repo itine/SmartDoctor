@@ -24,9 +24,16 @@ namespace SmartDoctor.Testing.Core
             _context = context;
         }
 
-        public async Task<IEnumerable<Answers>> GetAnswers() =>
-            await _context.Answers
-                .Where(x => x.IsTakenToCalculate.HasValue && x.IsTakenToCalculate.Value && !x.PatientId.HasValue).ToListAsync();
+        public async Task<IEnumerable<Answers>> GetAnswers()
+        {
+            var trainnigData = await _context.Answers
+                .Where(x => x.IsTakenToCalculate.HasValue
+                    && x.IsTakenToCalculate.Value).ToListAsync();
+            var testDataCount = Math.Ceiling(trainnigData.Count * 1.2 - trainnigData.Count);
+            var testData = _context.Answers.Where(x => x.IsTakenToCalculate.HasValue &&
+               !x.IsTakenToCalculate.Value).OrderBy(answer => Guid.NewGuid()).Take((int)testDataCount);
+            return trainnigData.Union(testData);
+        }
 
         public async Task<IEnumerable<Questions>> GetQuestions()
         {
@@ -64,7 +71,7 @@ namespace SmartDoctor.Testing.Core
         {
             var answer = await _context.Answers.FirstOrDefaultAsync(x => x.AnswerId == answerId);
             if (answer == null)
-                throw new Exception("Answer not foung");
+                throw new Exception("Answer not found");
             var data = new DataTable("Define the disease");
             var questions = (await GetQuestions()).ToArray();
             var questionsLength = questions.Length;
@@ -83,20 +90,20 @@ namespace SmartDoctor.Testing.Core
                 for (var i = 0; i < answerArr.Length; i++)
                     patient[questions[i].Text] = answerArr[i];
                 var userResponse = await RequestExecutor.ExecuteRequestAsync(
-                    MicroservicesEnum.User, RequestUrl.GetPatientById,
-                        new Parameter[] {
+                MicroservicesEnum.User, RequestUrl.GetPatientById,
+                    new Parameter[] {
                             new Parameter("patientId", (int)trainningAnswer.PatientId.Value, ParameterType.GetOrPost)
-                        });
+                    });
                 var patientData = JsonConvert.DeserializeObject<MksResponse>(userResponse);
                 if (!patientData.Success)
                     throw new Exception(patientData.Data);
                 var patientCtx = JsonConvert.DeserializeObject<Patients>(patientData.Data);
-                patient["Age category"] = (byte) new AgeLimit((byte)Math.Round((DateTime.UtcNow - patientCtx.DateBirth).TotalDays / 365.2425)).Limit;
+                patient["Age category"] = (byte)new AgeLimit((byte)Math.Round((DateTime.UtcNow - patientCtx.DateBirth).TotalDays / 365.2425)).Limit;
                 patient["Gender"] = patientCtx.Gender;
                 var diseaseResponseName = await RequestExecutor.ExecuteRequestAsync(
                    MicroservicesEnum.Medical, RequestUrl.GetDiseaseNameById,
                        new Parameter[] {
-                            new Parameter("diseaseId", 
+                            new Parameter("diseaseId",
                             trainningAnswer.DeseaseId.Value,
                             ParameterType.GetOrPost)
                        });
@@ -205,7 +212,5 @@ namespace SmartDoctor.Testing.Core
 
         public long[] GetPatientsWithNoReception() =>
             _context.Answers.Where(x => !x.IsTakenToCalculate.HasValue).Select(x => x.PatientId.Value).Distinct().ToArray();
-
-
     }
 }

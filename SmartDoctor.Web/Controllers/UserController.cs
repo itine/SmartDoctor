@@ -36,10 +36,10 @@ namespace SmartDoctor.Web.Controllers
         {
             var role = await _controllerRepository.InitRole(User);
             ViewBag.Role = role;
-            if (role == RoleTypes.None)
-                return RedirectToAction("Login", "User");
-            if (role == RoleTypes.Patient)
-                return RedirectToAction("Index", "Home");
+            //if (role == RoleTypes.None)
+            //    return RedirectToAction("Login", "User");
+            //if (role == RoleTypes.Patient)
+            //    return RedirectToAction("Index", "Home");
             var userResponse = JsonConvert.DeserializeObject<MksResponse>(
                await RequestExecutor.ExecuteRequestAsync(
                    MicroservicesEnum.User, RequestUrl.GetPatients));

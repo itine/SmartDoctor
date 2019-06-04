@@ -6,14 +6,14 @@
 
 <h2>Choose a patient</h2>
 <br />
-
-@Html.DropDownList("patientDDL",
-    new SelectList(ViewBag.Patients),
-    "Patient",
-    new { @id = "patientDDL", @style = "width: 178px; height: 30px;", @class = "form-control" })
-<br/>
-<button style="width: 150px; height: 30px;" class="btn" id="takeBtn" onclick="onClickTakeBtn()">Take</button>
-
+<center>
+    @Html.DropDownList("patientDDL",
+        new SelectList(ViewBag.Patients),
+        "Patient",
+        new { @id = "patientDDL", @style = "width: 278px; height: 30px;", @class = "form-control" })
+    <br />
+    <button style="width: 150px; height: 30px;" class="btn-success" id="takeBtn" onclick="onClickTakeBtn()">Take!</button>
+</center>
 <script type="text/javascript">
     
     function onClickTakeBtn() {

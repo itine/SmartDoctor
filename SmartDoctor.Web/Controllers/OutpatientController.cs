@@ -42,7 +42,7 @@ namespace SmartDoctor.Web.Controllers
             var userResponse = JsonConvert.DeserializeObject<MksResponse>(
              await RequestExecutor.ExecuteRequestAsync(
                  MicroservicesEnum.User, RequestUrl.GetPatientsByIds, new Parameter[]{
-                     new Parameter("ids",ids, ParameterType.RequestBody )
+                     new Parameter("ids", JsonConvert.SerializeObject(ids), ParameterType.RequestBody )
                  }));
             if (!userResponse.Success)
                 throw new Exception(userResponse.Data);

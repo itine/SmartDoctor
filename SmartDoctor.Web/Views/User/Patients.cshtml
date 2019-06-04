@@ -27,24 +27,25 @@
                 <input class="text" type="text" style="width:170px;height:33px;" id="fioTextBox" value="@user.Fio" />
             </td>
             <td>
-                <input type="text" style="height:33px;" id="phoneNumberTextBox" value="@user.PhoneNumber" />
+                <input type="text" id="phoneNumberTextBox" value="@user.PhoneNumber" />
             </td>
             <td>
-                <input type="text" style="height:33px;" id="workPlaceTextBox" value="@user.WorkPlace" />
+                <input type="text" id="workPlaceTextBox" value="@user.WorkPlace" />
             </td>
             <td>
-                <input type="text" style="height:33px;" id="genderTextBox" min="0" step="1" value="@user.Gender" />
+                <input type="text" id="genderTextBox" min="0" step="1" value="@user.Gender" />
             </td>
             <td>
-                <input type="text" style="height:33px;" id="dateBirthTextBox" min="0" step="1" value="@user.DateBirth" />
+                <input type="text" id="dateBirthTextBox" min="0" step="1" value="@user.DateBirth" />
             </td>
 
             <td>
-                <input type="text" style="height:33px;" id="passwordTextBox" min="0" step="1" value="@user.Password" />
+                <input type="text" style="width:63px;"  id="passwordTextBox" min="0" step="1" value="@user.Password" />
             </td>
             <td>
-                <button style="width: 75px; height: 25px;" class="mySuccess" id="updateUser" onclick="onClickUpdateUser(this.id)">Обновить</button>
-                <button style="width: 75px; height: 25px;" class="myDanger" id="deleteUser" onclick="onClickDeleteUser(this.id)">Удалить</button>
+                <button style="width: 100px; height: 25px;" class="btn-success" id="deleteUser" onclick="onClickDeleteUser(this.id)">Call</button>
+                <button style="width: 100px; height: 25px;" class="btn-success" id="updateUser" onclick="onClickUpdateUser(this.id)">Update</button>
+                <button style="width: 100px; height: 25px;" class="btn-danger" id="deleteUser" onclick="onClickDeleteUser(this.id)">Delete</button>
             </td>
         </tr>
         }
