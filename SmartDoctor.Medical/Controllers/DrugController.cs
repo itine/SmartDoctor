@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SmartDoctor.Medical.Core;
 
 namespace SmartDoctor.Medical.Controllers
@@ -14,15 +15,16 @@ namespace SmartDoctor.Medical.Controllers
         }
 
         [HttpGet("GetDrugs")]
-        public async Task<IActionResult> DiseaseDiagnostic()
+        public async Task<IActionResult> GetDrugs()
         {
             try
             {
-                var a = await _drugRepository.GetDrugs();
+                var drugs = await _drugRepository.GetDrugs();
                 return Json(
                       new
                       {
-                          Success = true
+                          Success = true,
+                          Data = JsonConvert.SerializeObject(drugs)
                       });
             }
             catch (Exception exception)

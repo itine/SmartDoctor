@@ -235,3 +235,4 @@ SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/Test/AlreadyHasCompleteTest.
 SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/Outpatient/Index.g.cshtml.cs
 SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/Outpatient/TakePatient.g.cshtml.cs
 SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/Outpatient/PatientReception.g.cshtml.cs
+SmartDoctor.Web/obj/Debug/netcoreapp2.1/Razor/Views/Home/Drugs.g.cshtml.cs

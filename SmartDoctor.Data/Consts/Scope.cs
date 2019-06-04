@@ -2,7 +2,7 @@
 {
     public class Scope
     {
-        public const string ExternalDrugApiUrl = "https://aidsinfo.nih.gov/api/drugs/";
+        public const string ExternalDrugApiUrl = "https://aidsinfo.nih.gov/api/";
         public const string GetQuestions = "GetQuestions";
         public const string PassTheTest = "PassTheTest";
         public const string GetAnswers = "GetAnswers";
@@ -29,5 +29,6 @@
         public const string GetPatientsWithNoReception = "GetPatientsWithNoReception";
         public const string CreateOutpatientCard = "CreateOutpatientCard";
         public const string GetPatientsByIds = "GetPatientsByIds";
+        public const string GetDrugs = "GetDrugs";
     }
 }

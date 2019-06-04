@@ -1,5 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using SmartDoctor.Data.Models;
+using SmartDoctor.Helper;
 using SmartDoctor.Web.Models;
 
 namespace SmartDoctor.Web.Controllers
@@ -19,6 +25,17 @@ namespace SmartDoctor.Web.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Drugs()
+        {
+            var medicalResponse = JsonConvert.DeserializeObject<MksResponse>(
+                await RequestExecutor.ExecuteRequestAsync(
+                    MicroservicesEnum.Medical, RequestUrl.GetDrugs));
+            if (!medicalResponse.Success)
+                throw new Exception(medicalResponse.Data);
+            var drugs = JsonConvert.DeserializeObject<List<Drug>>(medicalResponse.Data);
+            return View(drugs);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

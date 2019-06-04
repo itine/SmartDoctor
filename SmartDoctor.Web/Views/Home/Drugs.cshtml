@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SmartDoctor.Data.Models.Drug>
+
+@{
+    ViewData["Title"] = "Drugs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Drugs</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChemicalName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChemicalClass)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Names[1].Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhaseOfDevelopment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChemicalName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChemicalClass)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -22,7 +22,7 @@ namespace SmartDoctor.Helper
 
         public static async Task<string> ExecuteExternalRequestAsync(string url, Method method)
         {
-            var request = new RestRequest(url, method);
+            var request = new RestRequest(url, method, DataFormat.Json);
             return await Execute(Scope.ExternalDrugApiUrl, request);
         }
 
@@ -66,6 +66,7 @@ namespace SmartDoctor.Helper
         public static KeyValuePair<string, Method> GetPatientByFio = new KeyValuePair<string, Method>($"/{Scope.GetPatientByFio}", Method.GET);
         public static KeyValuePair<string, Method> CreateOutpatientCard = new KeyValuePair<string, Method>($"/{Scope.CreateOutpatientCard}", Method.POST);
         public static KeyValuePair<string, Method> GetPatientsByIds = new KeyValuePair<string, Method>($"/{Scope.GetPatientsByIds}", Method.POST);
+        public static KeyValuePair<string, Method> GetDrugs = new KeyValuePair<string, Method>($"/{Scope.GetDrugs}", Method.GET);
     }
 
     /// <summary>

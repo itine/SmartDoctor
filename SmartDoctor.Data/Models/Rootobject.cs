@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SmartDoctor.Data.Models
@@ -7,10 +6,10 @@ namespace SmartDoctor.Data.Models
 
     public class Rootobject
     {
-        public List<Class1> Property1 { get; set; }
+        public List<Drug> Property1 { get; set; }
     }
 
-    public class Class1
+    public class Drug
     {
         public int Id { get; set; }
         public Approvalstatus ApprovalStatus { get; set; }
