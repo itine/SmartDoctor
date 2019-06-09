@@ -105,5 +105,48 @@ namespace SmartDoctor.Medical.Core
             _context.OutpatientCards.Add(newOutpatientCard);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<OutpatientModel> GetOutpatientByPatientAndDoctorId(DoctorPatientModel model)
+        {
+            var outpatient = await _context.OutpatientCards
+                .FirstOrDefaultAsync(x => x.PatientId == model.PatientId && x.DoctorId == model.DoctorId);
+            var newOutpatient = new OutpatientModel
+            {
+                CreatedDate = outpatient.CreatedDate.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+                Description = outpatient.Description,
+                OutpatientCardId = outpatient.OutpatientCardId,
+                Status = (OutpatientStatuses)outpatient.Status
+            };
+            var userResponse = await RequestExecutor.ExecuteRequestAsync(
+               MicroservicesEnum.User, RequestUrl.GetPatientById,
+                   new Parameter[]
+                   {
+                        new Parameter("patientId", (int)outpatient.PatientId, ParameterType.GetOrPost)
+                   });
+            var patientData = JsonConvert.DeserializeObject<MksResponse>(userResponse);
+            if (!patientData.Success)
+                throw new Exception(patientData.Data);
+            var patientCtx = JsonConvert.DeserializeObject<Patients>(patientData.Data);
+            newOutpatient.Patient = patientCtx;
+            var diseaseResponse = await RequestExecutor.ExecuteRequestAsync(
+                MicroservicesEnum.Medical, RequestUrl.GetDiseaseNameById,
+                    new Parameter[] {
+                        new Parameter("diseaseId", outpatient.DiseaseId.Value, ParameterType.GetOrPost)
+                    });
+            var diseaseResponseName = JsonConvert.DeserializeObject<MksResponse>(diseaseResponse);
+            var diseaseName = string.Empty;
+            if (diseaseResponseName.Success)
+                diseaseName = JsonConvert.DeserializeObject<string>(diseaseResponseName.Data); 
+            return newOutpatient;
+        }
+
+        public async Task UpdateDescription(CardDescriptionModel model)
+        {
+            var outpatientCard = await _context.OutpatientCards.FirstOrDefaultAsync(x => x.OutpatientCardId == model.CardId);
+            if (outpatientCard == null)
+                throw new Exception($"Outpatient card not found. {model.CardId}");
+            outpatientCard.Description += "\n" + model.Description;
+            await _context.SaveChangesAsync();
+        }
     }
 }

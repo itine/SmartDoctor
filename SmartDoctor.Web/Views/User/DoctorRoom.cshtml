@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Chat room";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using SmartDoctor.Data.Enums
+
+<head>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="~/js/webrtclib.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <style type="text/css">
+        .message-bubble {
+            padding: 10px 0px 10px 0px;
+        }
+
+            .message-bubble:nth-child(even) {
+                background-color: #F5F5F5;
+            }
+
+            .message-bubble > * {
+                padding-left: 10px;
+            }
+
+        .panel-body {
+            padding: 0px;
+        }
+
+        .panel-heading {
+            background-color: #3d6da7 !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h2>Chat room</h2>
+        <br />
+        <video id="localVideo"></video>
+
+        <video id="remoteVideo"></video>
+        <div id="doctor-room">
+            <div class="container">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Chat</div>
+                        <div class="panel-body">
+                            <div class="container">
+                                <div class="row message-bubble">
+                                    <p class="text-muted">Matt Townsen</p>
+                                    <span>Why is yo shit so broke?</span>
+                                </div>
+                                <div class="row message-bubble">
+                                    <p class="text-muted">Matt Townsen</p>
+                                    <p>It Isn't'</p>
+                                </div>
+                                <div class="row message-bubble">
+                                    <p class="text-muted">Matt Townsen</p>
+                                    <p>Umm yes it is</p>
+                                </div>
+                                <div class="row message-bubble">
+                                    <p class="text-muted">Matt Townsen</p>
+                                    <p>Test message</p>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="input-group">
+                                    <input type="text" placeholder="Enter message here..." class="form-control">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button">Send</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+</body>
+
+<script>
+    var userId = @ViewBag.UserId;
+    var patientId = @ViewBag.PatientId;
+    var role = @ViewBag.Role == @((byte)RoleTypes.Patient) ? "user" : "creator";
+
+</script>

@@ -24,13 +24,7 @@ namespace SmartDoctor.Web.Controllers
             _controllerRepository = controllerRepository;
         }
 
-        [HttpGet]
-        public IActionResult Login()
-        {
-            ViewBag.Role = RoleTypes.None;
-            return View();
-        }
-
+     
         [HttpGet]
         public async Task<IActionResult> Patients()
         {
@@ -49,6 +43,22 @@ namespace SmartDoctor.Web.Controllers
             else
                 users.AddRange(JsonConvert.DeserializeObject<IEnumerable<PatientModel>>(userResponse.Data));
             return View(users);
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            ViewBag.Role = RoleTypes.None;
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DoctorRoom(long patientId)
+        {
+            ViewBag.UserId = _controllerRepository.GetUserId(User);
+            ViewBag.Role = (byte) await _controllerRepository.InitRole(User);
+            ViewBag.PatientId = patientId;
+            return View();
         }
 
         [HttpPost]
@@ -79,6 +89,7 @@ namespace SmartDoctor.Web.Controllers
             }
             return View(model);
         }
+
         [HttpGet]
         public async Task<IActionResult> Logoff()
         {

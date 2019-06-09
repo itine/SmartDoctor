@@ -166,5 +166,24 @@ namespace SmartDoctor.Testing.Controllers
                 return Json(new { Success = false, Data = exception.Message });
             }
         }
+
+        [HttpGet(Scope.GetNotViewedAnswer)]
+        public async Task<IActionResult> GetNotViewedAnswer(long patientId)
+        {
+            try
+            {
+
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = await _testRepository.GetNotViewedAnswer(patientId)
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, Data = exception.Message });
+            }
+        }
     }
 }

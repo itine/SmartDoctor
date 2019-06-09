@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
+using SmartDoctor.Data.ContextModels;
+using SmartDoctor.Data.Enums;
 using SmartDoctor.Data.JsonModels;
 using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
@@ -61,17 +63,17 @@ namespace SmartDoctor.Web.Controllers
                            new Parameter("userId", userId, ParameterType.RequestBody) }));
             if (!testingResponse.Success)
                 throw new Exception(testingResponse.Data);
-            return Json(new { Success = true,  Message = "ok" });
+            return Json(new { Success = true, Message = "ok" });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ToReception(PatientFioModel model)
+        [HttpGet]
+        public async Task<IActionResult> PatientReception(PatientFioModel model)
         {
             var userResponse = JsonConvert.DeserializeObject<MksResponse>(await RequestExecutor.ExecuteRequestAsync(
-                  MicroservicesEnum.User, RequestUrl.GetPatientByFio,
-                      new Parameter[] {
+                 MicroservicesEnum.User, RequestUrl.GetPatientByFio,
+                     new Parameter[] {
                             new Parameter("fio", model.Fio, ParameterType.GetOrPost)
-                      }));
+                     }));
             if (!userResponse.Success)
                 throw new Exception(userResponse.Data);
             var patient = JsonConvert.DeserializeObject<PatientModel>(userResponse.Data);
@@ -92,16 +94,137 @@ namespace SmartDoctor.Web.Controllers
             if (!medicalResponse.Success)
                 throw new Exception(medicalResponse.Data);
             ViewBag.PreDiagnos = medicalResponse.Data;
-            return RedirectToAction("PatientReception", "Outpatient", patient);
+            ViewBag.PatientId = patient.PatientId;
+            ViewBag.PatientFio = patient.Fio;
+            return View(patient);
         }
 
-
-        [HttpGet]
-        public async Task<IActionResult> PatientReception(PatientModel model)
+        [HttpPost]
+        public async Task<IActionResult> AccessAnswer(long patientId)
         {
-            ViewBag.PreDiagnos = "test";
-            return RedirectToAction("PatientReception", "Outpatient"); 
+            try
+            {
+                var testingResponse = JsonConvert.DeserializeObject<MksResponse>(
+                  await RequestExecutor.ExecuteRequestAsync(
+                       MicroservicesEnum.Testing, RequestUrl.GetNotViewedAnswer, new Parameter[]
+                       {
+                            new Parameter("patientId", patientId, ParameterType.GetOrPost)
+                       }));
+                if (!testingResponse.Success)
+                    throw new Exception(testingResponse.Data);
+                var answerId = JsonConvert.DeserializeObject<long>(testingResponse.Data);
+                var testingResponse2 = JsonConvert.DeserializeObject<MksResponse>(
+                      await RequestExecutor.ExecuteRequestAsync(
+                           MicroservicesEnum.Testing, RequestUrl.IncludeTestToCalculations, new Parameter[]
+                           {
+                                 new Parameter("id", answerId, ParameterType.RequestBody)
+                           }));
+                if (!testingResponse2.Success)
+                    throw new Exception(testingResponse2.Data);
+                //update outpatient
+                var doctorId = _controllerRepository.GetUserId(User);
+                var medicalResponse = JsonConvert.DeserializeObject<MksResponse>(
+                    await RequestExecutor.ExecuteRequestAsync(
+                        MicroservicesEnum.Medical, RequestUrl.GetOutpatientByPatientAndDoctorId, new Parameter[]{
+                               new Parameter(
+                                   "model", JsonConvert.SerializeObject(new DoctorPatientModel
+                                   {
+                                       DoctorId = doctorId,
+                                       PatientId = patientId
+                                   }), ParameterType.GetOrPost)
+                          }));
+                if (!medicalResponse.Success)
+                    throw new Exception(medicalResponse.Data);
+                var outpatient = JsonConvert.DeserializeObject<OutpatientModel>(medicalResponse.Data);
+                var medicalResponse2 = JsonConvert.DeserializeObject<MksResponse>(
+                   await RequestExecutor.ExecuteRequestAsync(
+                       MicroservicesEnum.Medical, RequestUrl.ChangeCardStatus, new Parameter[]{
+                               new Parameter("model", JsonConvert.SerializeObject(new CardStatusModel
+                               {
+                                   CardId = outpatient.OutpatientCardId,
+                                   Status = (byte) OutpatientStatuses.DoctorVisit
+                               }), ParameterType.RequestBody)}));
+                if (!medicalResponse2.Success)
+                    throw new Exception(medicalResponse2.Data);
+                return Json(new
+                {
+                    Success = true,
+                    Data = outpatient.OutpatientCardId
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    Success = false,
+                    Message  = ex.Message.ToString()
+                });
+            }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DiscardAnswer(long patientId)
+        {
+            try
+            {
+                var testingResponse = JsonConvert.DeserializeObject<MksResponse>(
+                      await RequestExecutor.ExecuteRequestAsync(
+                           MicroservicesEnum.User, RequestUrl.GetUserByPatientId, new Parameter[]
+                           {
+                               new Parameter("patientId", patientId, ParameterType.GetOrPost)
+                           }));
+                if (!testingResponse.Success)
+                    throw new Exception(testingResponse.Data);
+                var user = JsonConvert.DeserializeObject<Users>(testingResponse.Data);
+                var testingResponse2 = JsonConvert.DeserializeObject<MksResponse>(
+                  await RequestExecutor.ExecuteRequestAsync(
+                       MicroservicesEnum.Testing, RequestUrl.RemoveAnswer, new Parameter[]
+                       {
+                            new Parameter("userId", user.UserId, ParameterType.RequestBody)
+                       }));
+                if (!testingResponse2.Success)
+                    throw new Exception(testingResponse2.Data);
+                //update outpatient
+                var doctorId = _controllerRepository.GetUserId(User);
+                var medicalResponse = JsonConvert.DeserializeObject<MksResponse>(
+                    await RequestExecutor.ExecuteRequestAsync(
+                        MicroservicesEnum.Medical, RequestUrl.GetOutpatientByPatientAndDoctorId, new Parameter[]{
+                               new Parameter(
+                                   "model", JsonConvert.SerializeObject(new DoctorPatientModel
+                                   {
+                                       DoctorId = doctorId,
+                                       PatientId = patientId
+                                   }), ParameterType.GetOrPost)
+                          }));
+                if (!medicalResponse.Success)
+                    throw new Exception(medicalResponse.Data);
+                var outpatient = JsonConvert.DeserializeObject<OutpatientModel>(medicalResponse.Data);
+                var medicalResponse2 = JsonConvert.DeserializeObject<MksResponse>(
+                   await RequestExecutor.ExecuteRequestAsync(
+                       MicroservicesEnum.Medical, RequestUrl.ChangeCardStatus, new Parameter[]{
+                               new Parameter("model", JsonConvert.SerializeObject(new CardStatusModel
+                               {
+                                   CardId = outpatient.OutpatientCardId,
+                                   Status = (byte) OutpatientStatuses.DoctorVisit
+                               }), ParameterType.RequestBody)}));
+                if (!medicalResponse2.Success)
+                    throw new Exception(medicalResponse2.Data);
+                return Json(new
+                {
+                    Success = true,
+                    Data = outpatient.OutpatientCardId
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    Success = false,
+                    Message = ex.Message.ToString()
+                });
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> ChangeStatus(CardStatusModel model)
@@ -109,6 +232,18 @@ namespace SmartDoctor.Web.Controllers
             var medicalResponse = JsonConvert.DeserializeObject<MksResponse>(
                await RequestExecutor.ExecuteRequestAsync(
                    MicroservicesEnum.Medical, RequestUrl.ChangeCardStatus, new Parameter[]{
+                           new Parameter("model", JsonConvert.SerializeObject(model), ParameterType.RequestBody)}));
+            if (!medicalResponse.Success)
+                throw new Exception(medicalResponse.Data);
+            return RedirectToAction("Index", "Outpatient");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateDescription(CardDescriptionModel model)
+        {
+            var medicalResponse = JsonConvert.DeserializeObject<MksResponse>(
+               await RequestExecutor.ExecuteRequestAsync(
+                   MicroservicesEnum.Medical, RequestUrl.UpdateDescription, new Parameter[]{
                            new Parameter("model", JsonConvert.SerializeObject(model), ParameterType.RequestBody)}));
             if (!medicalResponse.Success)
                 throw new Exception(medicalResponse.Data);

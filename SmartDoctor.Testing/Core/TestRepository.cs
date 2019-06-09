@@ -152,7 +152,7 @@ namespace SmartDoctor.Testing.Core
         {
             var answer = await _context.Answers.FirstOrDefaultAsync(x => x.AnswerId == answerId);
             if (answer == null)
-                throw new Exception("Answer not foung");
+                throw new Exception("Answer not found");
             answer.IsTakenToCalculate = false;
             await _context.SaveChangesAsync();
         }
@@ -191,7 +191,6 @@ namespace SmartDoctor.Testing.Core
                 await _context.SaveChangesAsync();
             }
         }
-
         public async Task<long> GetPreDiseaseId(long userId)
         {
             var userResponse = await RequestExecutor.ExecuteRequestAsync(
@@ -212,5 +211,16 @@ namespace SmartDoctor.Testing.Core
 
         public long[] GetPatientsWithNoReception() =>
             _context.Answers.Where(x => !x.IsTakenToCalculate.HasValue).Select(x => x.PatientId.Value).Distinct().ToArray();
+
+        public async Task<long> GetNotViewedAnswer(long patientId)
+        {
+            var answer = await _context.Answers.FirstOrDefaultAsync(x => x.PatientId.HasValue
+                && x.PatientId.Value == patientId && !x.IsTakenToCalculate.HasValue);
+            if (answer == null)
+                throw new Exception("Internal error. Answer not found");
+            return answer.AnswerId;
+        }
+
+       
     }
 }

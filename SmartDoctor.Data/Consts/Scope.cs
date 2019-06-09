@@ -13,6 +13,7 @@
         public const string GetPatientById = "GetPatientById";
         public const string GetPatientByFio = "GetPatientByFio";
         public const string GetPatientByUserId = "GetPatientByUserId";
+        public const string GetUserByPatientId = "GetUserByPatientId";
         public const string GetUsers = "GetUsers";
         public const string GetPatients = "GetPatients";
         public const string Authorize = "Authorize";
@@ -30,5 +31,8 @@
         public const string CreateOutpatientCard = "CreateOutpatientCard";
         public const string GetPatientsByIds = "GetPatientsByIds";
         public const string GetDrugs = "GetDrugs";
+        public const string GetNotViewedAnswer = "GetNotViewedAnswer";
+        public const string GetOutpatientByPatientAndDoctorId = "GetOutpatientByPatientAndDoctorId";
+        public const string UpdateDescription = "UpdateDescription";        
     }
 }

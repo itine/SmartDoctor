@@ -34,6 +34,11 @@ namespace SmartDoctor.Web
                {
                    options.LoginPath = new PathString("/User/Login");
                });
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 8443;
+            });
             services.AddScoped<IControllerRepository, ControllerRepository>();
         }
 
@@ -45,6 +50,7 @@ namespace SmartDoctor.Web
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
+            app.UseHttpsRedirection();
         }
     }
 }

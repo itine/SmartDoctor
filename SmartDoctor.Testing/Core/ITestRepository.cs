@@ -13,6 +13,7 @@ namespace SmartDoctor.Testing.Core
         Task EvaluateAnswer(long answerId);
         Task IncludeTestToCalculations(long answerId);
         Task<bool> CheckNotViewedAnswer(long userId);
+        Task<long> GetNotViewedAnswer(long patientId);
         Task RemoveAnswer(long userId);
         Task<long> GetPreDiseaseId(long userId);
         long[] GetPatientsWithNoReception();

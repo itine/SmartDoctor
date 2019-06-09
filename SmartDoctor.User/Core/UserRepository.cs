@@ -132,6 +132,7 @@ namespace SmartDoctor.User.Core
                    join u in _context.Users on p.UserId equals u.UserId
                    select new PatientModel
                    {
+                       PatientId = p.PatientId.ToString(),
                        UserId = u.UserId.ToString(),
                        DateBirth = p.DateBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                        Fio = p.Fio,
@@ -158,6 +159,7 @@ namespace SmartDoctor.User.Core
                            where p.PatientId == id
                            select new PatientModel
                            {
+                               PatientId = p.PatientId.ToString(),
                                UserId = u.UserId.ToString(),
                                DateBirth = p.DateBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                                Fio = p.Fio,
@@ -176,6 +178,7 @@ namespace SmartDoctor.User.Core
                    where p.Fio == fio
                    select new PatientModel
                    {
+                       PatientId = p.PatientId.ToString(),
                        UserId = u.UserId.ToString(),
                        DateBirth = p.DateBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                        Fio = p.Fio,
@@ -194,6 +197,7 @@ namespace SmartDoctor.User.Core
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == patient.UserId);
                 result.Add(new PatientModel
                 {
+                    PatientId = patient.PatientId.ToString(),
                     UserId = user.UserId.ToString(),
                     DateBirth = patient.DateBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                     Fio = patient.Fio,
@@ -205,6 +209,12 @@ namespace SmartDoctor.User.Core
             }
             return result;
         }
-        
+
+        public async Task<Users> GetUserByPatientId(long id)
+        {
+            var patient = await GetPatientById(id);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == patient.UserId);
+            return user;
+        }
     }
 }

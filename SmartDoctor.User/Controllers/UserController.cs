@@ -124,6 +124,25 @@ namespace SmartDoctor.User.Controllers
             }
         }
 
+        [HttpGet(Scope.GetUserByPatientId)]
+        public async Task<IActionResult> GetUserByPatientId(long patientId)
+        {
+            try
+            {
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = JsonConvert.SerializeObject(await _userRepository.GetUserByPatientId(patientId))
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
+
+
         [HttpPost(Scope.Authorize)]
         public async Task<IActionResult> Authorize([FromBody] AuthModel model)
         {

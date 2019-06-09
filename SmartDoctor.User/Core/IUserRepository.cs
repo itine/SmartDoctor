@@ -15,6 +15,7 @@ namespace SmartDoctor.User.Core
         Task<Users> GetUserById(long id);
         Task<Patients> GetPatientById(long id);
         Task<Patients> GetPatientByUserId(long id);
+        Task<Users> GetUserByPatientId(long id);
         Task<IEnumerable<Users>> GetUsers();
         Task<IEnumerable<PatientModel>> GetPatients();
         Task<IEnumerable<PatientModel>> GetPatientsByIds(long[] ids);

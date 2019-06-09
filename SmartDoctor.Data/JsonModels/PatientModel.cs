@@ -6,6 +6,9 @@ namespace SmartDoctor.Data.JsonModels
 {
     public class PatientModel
     {
+        [Required, JsonProperty("PatientId")]
+        public string PatientId { get; set; }
+        
         [Required, JsonProperty("UserId")]
         public string UserId { get; set; }
 

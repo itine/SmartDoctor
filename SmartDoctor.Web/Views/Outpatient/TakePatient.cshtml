@@ -18,19 +18,7 @@
     
     function onClickTakeBtn() {
         var patient = $("#patientDDL").val();
-        var urlPath = '@Url.Action("ToReception", "Outpatient")';
-        $.ajax({
-            type: "POST",
-            data:
-            {
-                "Fio": patient
-            },
-            url: urlPath,
-            success: function () {
-            },
-            error: function () {
-                alert("error");
-            }
-        });
+        debugger;
+        window.location.href = '@Url.Action("PatientReception", "Outpatient")' + '/?fio=' + patient;
     }
 </script>

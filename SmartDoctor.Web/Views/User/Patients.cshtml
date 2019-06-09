@@ -21,38 +21,38 @@
         </tr>
         @foreach (var user in Model)
         {
-        <tr>
-            <td>
-                <input class="text" type="text" hidden="hidden" style="width:170px;" id="idTextBox" value="@user.UserId" />
-                <input class="text" type="text" style="width:170px;height:33px;" id="fioTextBox" value="@user.Fio" />
-            </td>
-            <td>
-                <input type="text" id="phoneNumberTextBox" value="@user.PhoneNumber" />
-            </td>
-            <td>
-                <input type="text" id="workPlaceTextBox" value="@user.WorkPlace" />
-            </td>
-            <td>
-                <input type="text" id="genderTextBox" min="0" step="1" value="@user.Gender" />
-            </td>
-            <td>
-                <input type="text" id="dateBirthTextBox" min="0" step="1" value="@user.DateBirth" />
-            </td>
+            <tr>
+                <td>
+                    <input class="text" type="text" hidden="hidden" style="width:170px;" id="idTextBox" value="@user.UserId" />
+                    <input class="text" type="text" style="width:170px;height:33px;" id="fioTextBox" value="@user.Fio" />
+                </td>
+                <td>
+                    <input type="text" id="phoneNumberTextBox" value="@user.PhoneNumber" />
+                </td>
+                <td>
+                    <input type="text" id="workPlaceTextBox" value="@user.WorkPlace" />
+                </td>
+                <td>
+                    <input type="text" id="genderTextBox" min="0" step="1" value="@user.Gender" />
+                </td>
+                <td>
+                    <input type="text" id="dateBirthTextBox" min="0" step="1" value="@user.DateBirth" />
+                </td>
 
-            <td>
-                <input type="text" style="width:63px;"  id="passwordTextBox" min="0" step="1" value="@user.Password" />
-            </td>
-            <td>
-                <button style="width: 100px; height: 25px;" class="btn-success" id="deleteUser" onclick="onClickDeleteUser(this.id)">Call</button>
-                <button style="width: 100px; height: 25px;" class="btn-success" id="updateUser" onclick="onClickUpdateUser(this.id)">Update</button>
-                <button style="width: 100px; height: 25px;" class="btn-danger" id="deleteUser" onclick="onClickDeleteUser(this.id)">Delete</button>
-            </td>
-        </tr>
+                <td>
+                    <input type="text" style="width:63px;" id="passwordTextBox" min="0" step="1" value="@user.Password" />
+                </td>
+                <td>
+                    <button style="width: 100px; height: 25px;" class="btn-success" id="callUser" onclick="onClickCallUser(this.id)">Call</button>
+                    <button style="width: 100px; height: 25px;" class="btn-success" id="updateUser" onclick="onClickUpdateUser(this.id)">Update</button>
+                    <button style="width: 100px; height: 25px;" class="btn-danger" id="deleteUser" onclick="onClickDeleteUser(this.id)">Delete</button>
+                </td>
+            </tr>
         }
     </table>
 </div>
 <script type="text/javascript">
-    var UIelements = ["idTextBox", "fioTextBox", "phoneNumberTextBox", "workPlaceTextBox", "genderTextBox", "dateBirthTextBox", "passwordTextBox", "updateUser", "deleteUser"];
+    var UIelements = ["idTextBox", "fioTextBox", "phoneNumberTextBox", "workPlaceTextBox", "genderTextBox", "dateBirthTextBox", "passwordTextBox", "callUser", "updateUser", "deleteUser"];
 
     function getSecondPart(str) {
         return str.split('_')[1];
@@ -80,7 +80,7 @@
         }
     }
 
- 
+
     function validatePass(val) {
         if (val.trim() === "") {
             alert("Укажите пароль");
@@ -201,6 +201,12 @@
                   alert("error");
               }
             });
+    }
+
+    function onClickCallUser(longId) {
+        var rowId = getSecondPart(longId);
+        var userId = getRowData(rowId).UserId;
+        window.location.href = '@Url.Action("DoctorRoom", "User")' + '/?patientId='+userId;
     }
 
 </script>

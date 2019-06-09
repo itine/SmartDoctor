@@ -1,15 +1,112 @@
 ﻿
-@{
-    ViewData["Title"] = "PatientReception";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 @using SmartDoctor.Data.JsonModels;
-@model PatientModel
+
 
 <h2>Patient reception</h2>
 
 <center>
-    Patient prediagnosis is @ViewBag.PreDiagnos.
     <br />
-  
+    <hr />
+    <center>
+        <label id="prediagnLabel">
+            Patient preliminary diagnosis is @ViewBag.PreDiagnos.
+        </label>
+        <br />
+        <button class="btn-success" style="width: 150px; height: 30px;" id="accessButton">Approve</button>
+        <br />
+        <button class="btn-danger" style="width: 150px; height: 30px;" id="cancelButton">Discard</button>
+        <br />
+
+        <label>Description</label>
+        <br />
+        <input id="description" type="text" />
+        <br />
+        <button class="btn-success" style="width: 150px; height: 30px;" id="completeBtn">Complete inspection</button>
+        <br />
+
+    </center>
+
 </center>
+
+
+<script>
+    var patientFio = '@ViewBag.PatientFio';
+    var cardId = -1;
+
+    $("#completeBtn").click(function () {
+        var description = $("#description").val();
+        var urlPath = '@Url.Action("UpdateDescription", "Outpatient")';
+        $.ajax({
+            type: "POST",
+            data:
+            {
+                "CardId": cardId,
+                "Description": description
+            },
+            url: urlPath,
+            success: function () {
+                alert("Description updated");
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    });
+
+    $("#accessButton").click(function () {
+       var urlPath = '@Url.Action("AccessAnswer", "Outpatient")';
+       $.ajax({
+            type: "POST",
+            data:
+            {
+                "patientId": '@ViewBag.PatientId'
+            },
+            url: urlPath,
+           success: function (data) {
+               if (data.success == true) {
+                   alert("Answer approved!");
+                   $("#accessButton").hide();
+                   $("#cancelButton").hide(); 
+                   $("#prediagnLabel").hide();
+                   cardId = data.data;
+               }
+               else
+                   alert("error!" + data.message);
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    });
+
+
+    $("#cancelButton").click(function () {
+        var urlPath = '@Url.Action("DiscardAnswer", "Outpatient")';
+       $.ajax({
+            type: "POST",
+           data:
+           {
+              "patientId": '@ViewBag.PatientId'
+                },
+            url: urlPath,
+           success: function (data) {
+               if (data.success == true) {
+                   alert("Answer removed!");
+                   $("#accessButton").hide();
+                   $("#cancelButton").hide();
+                   $("#prediagnLabel").hide();
+                   cardId = data.data;
+               }
+               else {
+                   alert("error!" + data.message);
+
+               }
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    });
+
+ 
+</script>
