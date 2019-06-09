@@ -33,6 +33,11 @@
         public const string GetDrugs = "GetDrugs";
         public const string GetNotViewedAnswer = "GetNotViewedAnswer";
         public const string GetOutpatientByPatientAndDoctorId = "GetOutpatientByPatientAndDoctorId";
-        public const string UpdateDescription = "UpdateDescription";        
+        public const string UpdateDescription = "UpdateDescription";
+        public const string ActualizeIds = "ActualizeIds";
+        public const string GetDoctors = "GetDoctors";
+        public const string GetDoctorIdByFio = "GetDoctorIdByFio";
+
+
     }
 }

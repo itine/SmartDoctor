@@ -41,7 +41,7 @@ function WebRTCLib(config){
 
     this.signalingURL = config.signalingURL || 'wss:/'+ location.hostname+(location.port ? ':'+location.port: '')+'/rtc';
 
-    this.creator = config.creator || true ;
+    this.creator = config.creator;
     this.channelReady = false;
     this.channel = null;
     this.name = "";
@@ -132,7 +132,7 @@ WebRTCLib.prototype.getToken = function(url){
     xhr.send();
 }
 
-WebRTCLib.prototype._get_token_from_signaling_server = function(name, role, pass){
+WebRTCLib.prototype._get_token_from_signaling_server = function(url, name, role, pass){
         this.token = false;
 
         var rtcOBJ = this;
@@ -147,7 +147,7 @@ WebRTCLib.prototype._get_token_from_signaling_server = function(name, role, pass
             'role':role
         });
 
-        xhr.open("POST", '/gettoken', true);
+        xhr.open("POST", url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onreadystatechange = function(){
@@ -227,6 +227,7 @@ WebRTCLib.prototype._createPeerConnection = function(){
                                                 console.log( "Signaling state changed: " + rtcOBJ.pc.signalingState);
                                                 switch(rtcOBJ.pc.signalingState) {
                                                     case "stable":
+                                                    //if(rtcOBJ.localStream==null) rtcOBJ.startStream();
                                                     //updateStatus("ICE negotiation complete");
                                                     break;
                                                 }
@@ -243,7 +244,7 @@ WebRTCLib.prototype._createPeerConnection = function(){
                 //listenForMessages(event.channel);
         };
         //console.log('Created RTCPeerConnnection');
-        this.startStream();
+        //this.startStream();
         if(this.creator)
             this.createDataChannel();
 

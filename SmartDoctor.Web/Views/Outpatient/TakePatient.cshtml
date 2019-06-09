@@ -19,6 +19,7 @@
     function onClickTakeBtn() {
         var patient = $("#patientDDL").val();
         debugger;
+
         window.location.href = '@Url.Action("PatientReception", "Outpatient")' + '/?fio=' + patient;
     }
 </script>

@@ -148,5 +148,22 @@ namespace SmartDoctor.Medical.Core
             outpatientCard.Description += "\n" + model.Description;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<long[]> ActualizeIds(long[] ids)
+        {
+            var existingIds = await _context.OutpatientCards
+                .Where(x => x.Status == (byte)OutpatientStatuses.OutpatientCardCreating)
+                .Select(x => x.PatientId)
+                .Intersect(ids)
+                .ToArrayAsync();
+            if (existingIds == null)
+                existingIds = new long[0];
+            return existingIds;
+        }
+
+        public async Task SetDisease(string disease)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

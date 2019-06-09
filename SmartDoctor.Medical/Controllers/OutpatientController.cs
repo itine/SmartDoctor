@@ -90,6 +90,25 @@ namespace SmartDoctor.Medical.Controllers
             }
         }
 
+        [HttpPost(Scope.ActualizeIds)]
+        public async Task<IActionResult> ActualizeIds([FromBody] long[] ids)
+        {
+            try
+            {
+                var newIds = await _outpatientRepository.ActualizeIds(ids);
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = JsonConvert.SerializeObject(newIds)
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
+
         [HttpPost(Scope.CreateOutpatientCard)]
         public async Task<IActionResult> CreateOutpatientCard([FromBody] long userId)
         {

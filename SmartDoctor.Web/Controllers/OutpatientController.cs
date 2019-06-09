@@ -94,7 +94,7 @@ namespace SmartDoctor.Web.Controllers
             if (!medicalResponse.Success)
                 throw new Exception(medicalResponse.Data);
             ViewBag.PreDiagnos = medicalResponse.Data;
-            ViewBag.PatientId = patient.PatientId;
+            ViewBag.PatientUserId = patient.PatientId;
             ViewBag.PatientFio = patient.Fio;
             return View(patient);
         }
@@ -131,7 +131,7 @@ namespace SmartDoctor.Web.Controllers
                                    {
                                        DoctorId = doctorId,
                                        PatientId = patientId
-                                   }), ParameterType.GetOrPost)
+                                   }), ParameterType.RequestBody)
                           }));
                 if (!medicalResponse.Success)
                     throw new Exception(medicalResponse.Data);

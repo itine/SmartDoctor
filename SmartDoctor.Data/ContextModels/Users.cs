@@ -9,5 +9,6 @@ namespace SmartDoctor.Data.ContextModels
         public string Password { get; set; }
         public byte? Role { get; set; }
         public DateTime? CreatedDate { get; set; }
+        public string Fio { get; set; }
     }
 }

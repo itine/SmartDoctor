@@ -71,6 +71,10 @@ namespace SmartDoctor.Helper
         public static KeyValuePair<string, Method> GetUserByPatientId = new KeyValuePair<string, Method>($"/{Scope.GetUserByPatientId}", Method.GET);
         public static KeyValuePair<string, Method> GetOutpatientByPatientAndDoctorId = new KeyValuePair<string, Method>($"/{Scope.GetOutpatientByPatientAndDoctorId}", Method.POST);
         public static KeyValuePair<string, Method> UpdateDescription = new KeyValuePair<string, Method>($"/{Scope.UpdateDescription}", Method.POST);
+        public static KeyValuePair<string, Method> ActualizeIds = new KeyValuePair<string, Method>($"/{Scope.ActualizeIds}", Method.POST);
+        public static KeyValuePair<string, Method> GetDoctors = new KeyValuePair<string, Method>($"/{Scope.GetDoctors}", Method.GET);
+        public static KeyValuePair<string, Method> GetDoctorIdByFio = new KeyValuePair<string, Method>($"/{Scope.GetDoctorIdByFio}", Method.GET);
+
     }
 
     /// <summary>

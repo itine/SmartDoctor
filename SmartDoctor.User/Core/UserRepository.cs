@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using RestSharp;
 using SmartDoctor.Data.ContextModels;
 using SmartDoctor.Data.Enums;
 using SmartDoctor.Data.JsonModels;
@@ -191,7 +192,16 @@ namespace SmartDoctor.User.Core
         public async Task<IEnumerable<PatientModel>> GetPatientsByIds(long[] ids)
         {
             var result = new List<PatientModel>();
-            foreach(var id in ids)
+            var medicalResponse = await RequestExecutor.ExecuteRequestAsync(
+                MicroservicesEnum.Medical, RequestUrl.ActualizeIds,
+                    new Parameter[] {
+                            new Parameter("ids", JsonConvert.SerializeObject(ids), ParameterType.RequestBody)
+                    });
+            var medicalData = JsonConvert.DeserializeObject<MksResponse>(medicalResponse);
+            if (!medicalData.Success)
+                throw new Exception(medicalData.Data);
+            ids = JsonConvert.DeserializeObject<long[]>(medicalData.Data);
+            foreach (var id in ids)
             {
                 var patient = await _context.Patients.FirstOrDefaultAsync(x => x.PatientId == id);
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == patient.UserId);
@@ -215,6 +225,20 @@ namespace SmartDoctor.User.Core
             var patient = await GetPatientById(id);
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserId == patient.UserId);
             return user;
+        }
+
+        public async Task<IEnumerable<string>> GetDoctors()
+        {
+            var doctors = _context.Users.Where(x => x.Role == (byte)RoleTypes.Doctor);
+            return await doctors.Select(x => x.Fio).ToListAsync();
+        }
+
+        public async Task<long> GetDoctorIdByFio(string fio)
+        {
+            var doctor = await _context.Users.FirstOrDefaultAsync(x => x.Fio.Equals(fio));
+            if (doctor == null)
+                throw new Exception("Doctor not found");
+            return doctor.UserId;
         }
     }
 }

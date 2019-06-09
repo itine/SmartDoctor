@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "PatientRoom";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Patient room</h2>
+<br />
+<center>
+    @Html.DropDownList("doctorsDDL",
+        new SelectList(ViewBag.Doctors),
+        "Doctor",
+        new { @id = "doctorsDDL", @style = "width: 278px; height: 30px;", @class = "form-control" })
+    <br />
+    <button style="width: 150px; height: 30px;" class="btn-success" id="takeBtn" onclick="onClickCallBtn()">Call!</button>
+</center>
+<script type="text/javascript">
+
+    function onClickCallBtn() {
+        var doctor = $("#doctorsDDL").val();
+        var urlPath = '@Url.Action("GetDoctorIdByFio", "User")';
+        $.ajax({
+            type: "GET",
+            data: {
+                "fio": doctor
+            },
+              dataType: "json",
+              url: urlPath,
+              success: function (data) {
+                   window.location.href = '@Url.Action("DoctorRoom", "User")' + '/?UserId=' + data.data + '&IsDoctor=false';
+              },
+              error: function () {
+                  alert("error");
+              }
+            });
+       
+    }
+</script>

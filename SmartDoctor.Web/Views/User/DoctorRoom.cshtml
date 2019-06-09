@@ -37,40 +37,48 @@
     <center>
         <h2>Chat room</h2>
         <br />
-        <video id="localVideo"></video>
-
-        <video id="remoteVideo"></video>
+        <br />
         <div id="doctor-room">
-            <div class="container">
-                <div class="row">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Chat</div>
-                        <div class="panel-body">
-                            <div class="container">
-                                <div class="row message-bubble">
-                                    <p class="text-muted">Matt Townsen</p>
-                                    <span>Why is yo shit so broke?</span>
-                                </div>
-                                <div class="row message-bubble">
-                                    <p class="text-muted">Matt Townsen</p>
-                                    <p>It Isn't'</p>
-                                </div>
-                                <div class="row message-bubble">
-                                    <p class="text-muted">Matt Townsen</p>
-                                    <p>Umm yes it is</p>
-                                </div>
-                                <div class="row message-bubble">
-                                    <p class="text-muted">Matt Townsen</p>
-                                    <p>Test message</p>
-                                </div>
+            <div id="chatMessaging">
+
+            </div>
+            <input type="text" id="chat" />
+            <button id="sendBtnId" style="width:100px; height:25px;" class="btn-success">Send</button>
+            <br />
+            <br />
+        </div>
+        <video id="localVideo" autoplay muted playsinline></video>
+
+        <video id="remoteVideo" autoplay muted playsinline></video>
+        <div class="container">
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Chat</div>
+                    <div class="panel-body">
+                        <div class="container">
+                            <div class="row message-bubble">
+                                <p class="text-muted">Matt Townsen</p>
+                                <span>Why is yo shit so broke?</span>
                             </div>
-                            <div class="panel-footer">
-                                <div class="input-group">
-                                    <input type="text" placeholder="Enter message here..." class="form-control">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">Send</button>
-                                    </span>
-                                </div>
+                            <div class="row message-bubble">
+                                <p class="text-muted">Matt Townsen</p>
+                                <p>It Isn't'</p>
+                            </div>
+                            <div class="row message-bubble">
+                                <p class="text-muted">Matt Townsen</p>
+                                <p>Umm yes it is</p>
+                            </div>
+                            <div class="row message-bubble">
+                                <p class="text-muted">Matt Townsen</p>
+                                <p>Test message</p>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="input-group">
+                                <input type="text" placeholder="Enter message here..." class="form-control">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">Send</button>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -81,8 +89,47 @@
 </body>
 
 <script>
-    var userId = @ViewBag.UserId;
-    var patientId = @ViewBag.PatientId;
-    var role = @ViewBag.Role == @((byte)RoleTypes.Patient) ? "user" : "creator";
+    var role = '@ViewBag.Creator' ? "creator" : "user" ;
+    var doctorId = '@ViewBag.DoctorId';
+    var patientId = '@ViewBag.PatientUserId';
+
+    var sendTextBtn = document.querySelector("#sendBtnId");
+	var sendText = document.querySelector("#chat");
+	var textArea = document.querySelector("#chatMessaging");
+ 
+	var config = {
+			room:doctorId + '-' + patientId,
+			creator: role=="creator",
+			pcConfig:{
+				iceServers: [{
+					'urls': 'stun:stun.l.google.com:19302'
+				}],
+			},
+			sdpConstraints : {
+				offerToReceiveAudio: true,
+				offerToReceiveVideo: true
+			},
+			localVideo : document.querySelector('#localVideo'),
+			remoteVideo : document.querySelector('#remoteVideo'),
+			signalingURL:  'wss://ec2-3-86-214-19.compute-1.amazonaws.com:8443/webrtc/rtc'
+	};
+
+
+
+	var rtc = new WebRTCLib(config);
+	
+	rtc.onTextMessage = function(msg){
+		textArea.innerHTML += msg.fromUser +': ' + msg.value + '<br>';
+	}
+	
+	sendTextBtn.onclick = function() {
+        rtc.sendTextMessage(sendText.value);
+        textArea.innerHTML += doctorId +': ' + sendText.value + '<br>';
+     };
+
+    var tokenURL = 'https://ec2-3-86-214-19.compute-1.amazonaws.com:8443/webrtc/gettoken';
+    rtc._get_token_from_signaling_server(tokenURL, doctorId, role, role=="creator"?'12345':'54321');
+	
+	 setTimeout(function() { console.log("startStream"); rtc.startStream(); }, 3000);
 
 </script>

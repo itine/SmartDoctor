@@ -24,6 +24,7 @@
             <tr>
                 <td>
                     <input class="text" type="text" hidden="hidden" style="width:170px;" id="idTextBox" value="@user.UserId" />
+                    <input class="text" type="text" hidden="hidden" style="width:170px;" id="idPatTextBox" value="@user.PatientId" />
                     <input class="text" type="text" style="width:170px;height:33px;" id="fioTextBox" value="@user.Fio" />
                 </td>
                 <td>
@@ -52,7 +53,7 @@
     </table>
 </div>
 <script type="text/javascript">
-    var UIelements = ["idTextBox", "fioTextBox", "phoneNumberTextBox", "workPlaceTextBox", "genderTextBox", "dateBirthTextBox", "passwordTextBox", "callUser", "updateUser", "deleteUser"];
+    var UIelements = ["idTextBox", "idPatTextBox", "fioTextBox", "phoneNumberTextBox", "workPlaceTextBox", "genderTextBox", "dateBirthTextBox", "passwordTextBox", "callUser", "updateUser", "deleteUser"];
 
     function getSecondPart(str) {
         return str.split('_')[1];
@@ -71,6 +72,7 @@
     function getRowData(rowId) {
         return {
             "UserId": $("#idTextBox_" + rowId).val(),
+            "PatientId": $("#idPatTextBox_" + rowId).val(),
             "Fio": $("#fioTextBox_" + rowId).val(),
             "DateBirth": $("#dateBirthTextBox_" + rowId).val(),
             "WorkPlace": $("#workPlaceTextBox_" + rowId).val(),
@@ -205,7 +207,7 @@
 
     function onClickCallUser(longId) {
         var rowId = getSecondPart(longId);
-        var userId = getRowData(rowId).UserId;
+        var userId = getRowData(rowId).PatientId;
         window.location.href = '@Url.Action("DoctorRoom", "User")' + '/?patientId='+userId;
     }
 

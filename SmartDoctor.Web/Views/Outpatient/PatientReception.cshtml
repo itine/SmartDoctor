@@ -8,18 +8,24 @@
     <br />
     <hr />
     <center>
-        <label id="prediagnLabel">
-            Patient preliminary diagnosis is @ViewBag.PreDiagnos.
-        </label>
+        <h3>
+            <label id="prediagnLabel">
+                Patient preliminary diagnosis is @ViewBag.PreDiagnos.
+            </label>
+        </h3>
+        <br />
         <br />
         <button class="btn-success" style="width: 150px; height: 30px;" id="accessButton">Approve</button>
         <br />
+        <br />
         <button class="btn-danger" style="width: 150px; height: 30px;" id="cancelButton">Discard</button>
+        <br />
         <br />
 
         <label>Description</label>
         <br />
-        <input id="description" type="text" />
+        <input class="text-success" style="width:400px; height: 100px;" id="description" type="text" />
+        <br />
         <br />
         <button class="btn-success" style="width: 150px; height: 30px;" id="completeBtn">Complete inspection</button>
         <br />

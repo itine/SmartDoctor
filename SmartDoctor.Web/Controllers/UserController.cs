@@ -24,7 +24,7 @@ namespace SmartDoctor.Web.Controllers
             _controllerRepository = controllerRepository;
         }
 
-     
+
         [HttpGet]
         public async Task<IActionResult> Patients()
         {
@@ -53,11 +53,66 @@ namespace SmartDoctor.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DoctorRoom(long patientId)
+        public async Task<IActionResult> DoctorRoom(CreatorModel model)
         {
-            ViewBag.UserId = _controllerRepository.GetUserId(User);
-            ViewBag.Role = (byte) await _controllerRepository.InitRole(User);
-            ViewBag.PatientId = patientId;
+            if (model.IsDoctor)
+            {
+                ViewBag.DoctorId = _controllerRepository.GetUserId(User);
+                var userResponse = JsonConvert.DeserializeObject<MksResponse>(
+                  await RequestExecutor.ExecuteRequestAsync(
+                      MicroservicesEnum.User, RequestUrl.GetUserByPatientId, new Parameter[] {
+                                new Parameter("patientId", model.UserId, ParameterType.GetOrPost)
+                      }));
+                if (!userResponse.Success)
+                    throw new Exception(userResponse.Data);
+                var user = JsonConvert.DeserializeObject<Users>(userResponse.Data);
+                ViewBag.PatientUserId = user.UserId;
+                ViewBag.Creator = true;
+            }
+            else
+            {
+                ViewBag.DoctorId = model.UserId;
+                ViewBag.PatientUserId = _controllerRepository.GetUserId(User);
+                ViewBag.Creator = false;
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDoctorIdByFio(string fio)
+        {
+            try
+            {
+                var userResponse = JsonConvert.DeserializeObject<MksResponse>(
+                await RequestExecutor.ExecuteRequestAsync(
+                    MicroservicesEnum.User, RequestUrl.GetDoctorIdByFio, new Parameter[] {
+                        new Parameter("fio", fio, ParameterType.GetOrPost)
+                    }));
+                if (!userResponse.Success)
+                    throw new Exception(userResponse.Data);
+                var userid = JsonConvert.DeserializeObject<long>(userResponse.Data);
+                return Json(new { Success = true, Data = userid });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> PatientRoom()
+        {
+            var role = await _controllerRepository.InitRole(User);
+            if (role == RoleTypes.None)
+                return RedirectToAction("Login", "User");
+            if (role != RoleTypes.Patient)
+                return RedirectToAction("Index", "Home");
+            var userResponse = JsonConvert.DeserializeObject<MksResponse>(
+                    await RequestExecutor.ExecuteRequestAsync(
+                        MicroservicesEnum.User, RequestUrl.GetDoctors));
+            var user = new List<string>();
+            if (userResponse.Success)
+                user.AddRange(JsonConvert.DeserializeObject<IEnumerable<string>>(userResponse.Data));
+            ViewBag.Doctors = user;
             return View();
         }
 
@@ -77,7 +132,7 @@ namespace SmartDoctor.Web.Controllers
                 {
                     user = JsonConvert.DeserializeObject<Users>(userResponse.Data);
                     await Authenticate(user.UserId.ToString());
-                    ViewBag.Role = (RoleTypes) user.Role;
+                    ViewBag.Role = (RoleTypes)user.Role;
                     return RedirectToAction("Index", "Home");
                 }
                 ViewBag.Role = RoleTypes.None;

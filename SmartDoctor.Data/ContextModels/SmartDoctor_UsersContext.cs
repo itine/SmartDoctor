@@ -41,6 +41,11 @@ namespace SmartDoctor.Data.ContextModels
 
                 entity.Property(e => e.CreatedDate).HasColumnType("date");
 
+                entity.Property(e => e.Fio)
+                   .IsRequired()
+                   .HasColumnName("fio")
+                   .HasMaxLength(50);
+
                 entity.Property(e => e.Password).HasMaxLength(20);
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(20);
