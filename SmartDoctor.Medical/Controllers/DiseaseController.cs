@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SmartDoctor.Data.Consts;
 using SmartDoctor.Medical.Core;
@@ -15,6 +14,25 @@ namespace SmartDoctor.Medical.Controllers
         public DiseaseController(IDiseaseRepository diseaseRepository)
         {
             _diseaseRepository = diseaseRepository;
+        }
+
+        [HttpGet(Scope.GetAllDiseases)]
+        public async Task<IActionResult> GetAllDiseases()
+        {
+            try
+            {
+                var diseases = await _diseaseRepository.GetAllDiseases();
+                return Json(
+                      new
+                      {
+                          Success = true,
+                          Data = JsonConvert.SerializeObject(diseases)
+                      });
+            }
+            catch (Exception exception)
+            {
+                return Json(new { Success = false, exception.Message });
+            }
         }
 
         [HttpGet("DiseaseDiagnostic")]

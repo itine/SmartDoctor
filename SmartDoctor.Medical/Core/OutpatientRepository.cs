@@ -146,6 +146,15 @@ namespace SmartDoctor.Medical.Core
             if (outpatientCard == null)
                 throw new Exception($"Outpatient card not found. {model.CardId}");
             outpatientCard.Description += "\n" + model.Description;
+            var diseaseResponse = await RequestExecutor.ExecuteRequestAsync(
+              MicroservicesEnum.Medical, RequestUrl.GetDiseaseIdByName,
+                  new Parameter[] {
+                        new Parameter("name", model.Disease, ParameterType.GetOrPost)
+                  });
+            var diseaseResponseName = JsonConvert.DeserializeObject<MksResponse>(diseaseResponse);
+            if (!diseaseResponseName.Success)
+                throw new Exception("Disease not found");
+            outpatientCard.DiseaseId = JsonConvert.DeserializeObject<long>(diseaseResponseName.Data);
             await _context.SaveChangesAsync();
         }
 

@@ -5,6 +5,8 @@ using SmartDoctor.Data.ContextModels;
 using SmartDoctor.Data.Models;
 using SmartDoctor.Helper;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartDoctor.Medical.Core
@@ -28,6 +30,9 @@ namespace SmartDoctor.Medical.Core
             var diseaseName = JsonConvert.DeserializeObject<MksResponse>(diseaseResponse);
             return null;
         }
+
+        public async Task<IEnumerable<string>> GetAllDiseases() =>
+            await _context.Diseases.Select(x => x.Name).ToListAsync();
 
         public async Task<long> GetDiseaseIdByName(string name)
         {

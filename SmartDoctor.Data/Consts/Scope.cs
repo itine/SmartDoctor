@@ -7,6 +7,7 @@
         public const string PassTheTest = "PassTheTest";
         public const string GetAnswers = "GetAnswers";
         public const string GetDiseaseNameById = "GetDiseaseNameById";
+        public const string GetAllDiseases = "GetAllDiseases";
         public const string GetDiseaseIdByName = "GetDiseaseIdByName";
         public const string EvaluateAnswer = "EvaluateAnswer";
         public const string GetUserById = "GetUserById";

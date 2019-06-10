@@ -87,7 +87,6 @@ WebRTCLib.prototype.connect = function(){
             rtcOBJ.disconnect();
         };
     }
-
 }
 
 WebRTCLib.prototype._processSignalingMessage = function(message) {
@@ -97,9 +96,9 @@ WebRTCLib.prototype._processSignalingMessage = function(message) {
         this.pc.setRemoteDescription(new RTCSessionDescription(msg)), function () {
             //console.log(pc);
             rtcObj._doAnswer();
-        }, console.error.bind(console));
-        //this.pc.setRemoteDescription(new RTCSessionDescription(msg));
-        //this._doAnswer();
+        }, console.error.bind(console);
+       // this.pc.setRemoteDescription(new RTCSessionDescription(msg));
+        this._doAnswer();
     } else if (msg.type === 'answer') {
         this.pc.setRemoteDescription(new RTCSessionDescription(msg));
     } else if (msg.type === 'candidate') {

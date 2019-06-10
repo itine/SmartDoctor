@@ -22,6 +22,12 @@
         <br />
         <br />
 
+        @Html.DropDownList("diseasesDDL",
+            new SelectList(ViewBag.Diseases),
+            "diseasesDDL",
+            new { @id = "diseasesDDL", @style = "width: 278px; height: 30px;", @class = "form-control" })
+        <br />
+
         <label>Description</label>
         <br />
         <input class="text-success" style="width:400px; height: 100px;" id="description" type="text" />
@@ -41,13 +47,15 @@
 
     $("#completeBtn").click(function () {
         var description = $("#description").val();
+        var disease = $("#diseasesDDL").val();
         var urlPath = '@Url.Action("UpdateDescription", "Outpatient")';
         $.ajax({
             type: "POST",
             data:
             {
                 "CardId": cardId,
-                "Description": description
+                "Description": description,
+                "Disease": disease
             },
             url: urlPath,
             success: function () {

@@ -93,9 +93,17 @@ namespace SmartDoctor.Web.Controllers
                        }));
             if (!medicalResponse.Success)
                 throw new Exception(medicalResponse.Data);
+
+            var medicalResponse2 = JsonConvert.DeserializeObject<MksResponse>(
+             await RequestExecutor.ExecuteRequestAsync(
+                 MicroservicesEnum.Medical, RequestUrl.GetAllDiseases));
+            if (!medicalResponse2.Success)
+                throw new Exception(medicalResponse2.Data);
+            var diseases = JsonConvert.DeserializeObject<List<string>>(medicalResponse2.Data);
             ViewBag.PreDiagnos = medicalResponse.Data;
             ViewBag.PatientUserId = patient.PatientId;
             ViewBag.PatientFio = patient.Fio;
+            ViewBag.Diseases = diseases;
             return View(patient);
         }
 
