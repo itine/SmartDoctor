@@ -68,14 +68,12 @@ namespace SmartDoctor.Web.Controllers
                 var user = JsonConvert.DeserializeObject<Users>(userResponse.Data);
                 ViewBag.PatientUserId = user.UserId;
                 ViewBag.Role = "creator"; 
-               // ViewBag.Creator = true;
             }
             else
             {
                 ViewBag.DoctorId = model.UserId;
                 ViewBag.PatientUserId = _controllerRepository.GetUserId(User);
                 ViewBag.Role = "user";
-                //ViewBag.Creator = false;
             }
             return View();
         }

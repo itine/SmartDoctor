@@ -77,12 +77,12 @@ namespace SmartDoctor.Testing.Controllers
         {
             try
             {
-                await _testRepository.IncludeTestToCalculations(id);
+
                 return Json(
                       new
                       {
                           Success = true,
-                          Data = "ok"
+                          Data = await _testRepository.IncludeTestToCalculations(id)
                       });
             }
             catch (Exception exception)
@@ -96,13 +96,13 @@ namespace SmartDoctor.Testing.Controllers
         {
             try
             {
-                
+
                 return Json(
                       new
                       {
                           Success = true,
                           Data = await _testRepository.CheckNotViewedAnswer(userId)
-                       });
+                      });
             }
             catch (Exception exception)
             {

@@ -24,7 +24,7 @@
 
         @Html.DropDownList("diseasesDDL",
             new SelectList(ViewBag.Diseases),
-            "diseasesDDL",
+            "Select disease",
             new { @id = "diseasesDDL", @style = "width: 278px; height: 30px;", @class = "form-control" })
         <br />
 
@@ -60,6 +60,7 @@
             url: urlPath,
             success: function () {
                 alert("Description updated");
+                window.location.href = '@Url.Action("Index", "Outpatient")';
             },
             error: function () {
                 alert("error");
@@ -82,10 +83,11 @@
                    $("#accessButton").hide();
                    $("#cancelButton").hide(); 
                    $("#prediagnLabel").hide();
+                   $("#diseasesDDL").hide();
                    cardId = data.data;
                }
                else
-                   alert("error!" + data.message);
+                   alert("error! " + data.message);
             },
             error: function () {
                 alert("error");

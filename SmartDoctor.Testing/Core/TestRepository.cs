@@ -148,13 +148,14 @@ namespace SmartDoctor.Testing.Core
         /// </summary>
         /// <param name="answerId"></param>
         /// <returns></returns>
-        public async Task IncludeTestToCalculations(long answerId)
+        public async Task<long> IncludeTestToCalculations(long answerId)
         {
             var answer = await _context.Answers.FirstOrDefaultAsync(x => x.AnswerId == answerId);
             if (answer == null)
                 throw new Exception("Answer not found");
             answer.IsTakenToCalculate = false;
             await _context.SaveChangesAsync();
+            return answer.DeseaseId.Value;
         }
 
         public async Task<bool> CheckNotViewedAnswer(long userId)

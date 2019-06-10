@@ -101,8 +101,7 @@ namespace SmartDoctor.Web.Controllers
                 throw new Exception(medicalResponse2.Data);
             var diseases = JsonConvert.DeserializeObject<List<string>>(medicalResponse2.Data);
             ViewBag.PreDiagnos = medicalResponse.Data;
-            ViewBag.PatientUserId = patient.PatientId;
-            ViewBag.PatientFio = patient.Fio;
+            ViewBag.PatientId = patient.PatientId;
             ViewBag.Diseases = diseases;
             return View(patient);
         }
@@ -129,6 +128,7 @@ namespace SmartDoctor.Web.Controllers
                            }));
                 if (!testingResponse2.Success)
                     throw new Exception(testingResponse2.Data);
+                var diseaseId = JsonConvert.DeserializeObject<long>(testingResponse2.Data);
                 //update outpatient
                 var doctorId = _controllerRepository.GetUserId(User);
                 var medicalResponse = JsonConvert.DeserializeObject<MksResponse>(
@@ -138,7 +138,8 @@ namespace SmartDoctor.Web.Controllers
                                    "model", JsonConvert.SerializeObject(new DoctorPatientModel
                                    {
                                        DoctorId = doctorId,
-                                       PatientId = patientId
+                                       PatientId = patientId,
+                                       DiseaseId = diseaseId
                                    }), ParameterType.RequestBody)
                           }));
                 if (!medicalResponse.Success)

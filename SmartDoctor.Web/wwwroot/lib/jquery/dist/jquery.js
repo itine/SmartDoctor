@@ -522,7 +522,8 @@ var i,
 	hasDuplicate,
 
 	// Local document vars
-	setDocument,
+	
+ocument,
 	document,
 	docElem,
 	documentIsHTML,

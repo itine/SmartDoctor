@@ -10,7 +10,6 @@ namespace SmartDoctor.Medical.Core
         Task<OutpatientModel> GetOutpatientById(long cardId);
         Task ChangeStatus(CardStatusModel model);
         Task UpdateDescription(CardDescriptionModel model);
-        Task SetDisease(string disease);
         Task CreateOutpatientCard(long userId);
         Task<OutpatientModel> GetOutpatientByPatientAndDoctorId(DoctorPatientModel model);
         Task<long[]> ActualizeIds(long[] ids);

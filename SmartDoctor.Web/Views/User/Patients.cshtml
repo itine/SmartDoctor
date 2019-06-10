@@ -11,6 +11,7 @@
     <hr />
     <table class="table table-bordered table-responsive table-hover">
         <tr>
+            <th></th>
             <th>FIO</th>
             <th>Phone number</th>
             <th>Work place</th>
@@ -22,6 +23,12 @@
         @foreach (var user in Model)
         {
             <tr>
+
+
+                <td>
+                        <img width="25"  id="callUser" onclick="onClickCallUser(this.id)" src="/images/call.png" />
+                    
+                </td>
                 <td>
                     <input class="text" type="text" hidden="hidden" style="width:170px;" id="idTextBox" value="@user.UserId" />
                     <input class="text" type="text" hidden="hidden" style="width:170px;" id="idPatTextBox" value="@user.PatientId" />
@@ -44,7 +51,6 @@
                     <input type="text" style="width:63px;" id="passwordTextBox" min="0" step="1" value="@user.Password" />
                 </td>
                 <td>
-                    <button style="width: 100px; height: 25px;" class="btn-success" id="callUser" onclick="onClickCallUser(this.id)">Call</button>
                     <button style="width: 100px; height: 25px;" class="btn-success" id="updateUser" onclick="onClickUpdateUser(this.id)">Update</button>
                     <button style="width: 100px; height: 25px;" class="btn-danger" id="deleteUser" onclick="onClickDeleteUser(this.id)">Delete</button>
                 </td>

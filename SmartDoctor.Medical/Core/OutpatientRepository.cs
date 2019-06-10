@@ -131,12 +131,15 @@ namespace SmartDoctor.Medical.Core
             var diseaseResponse = await RequestExecutor.ExecuteRequestAsync(
                 MicroservicesEnum.Medical, RequestUrl.GetDiseaseNameById,
                     new Parameter[] {
-                        new Parameter("diseaseId", outpatient.DiseaseId.Value, ParameterType.GetOrPost)
+                        new Parameter("diseaseId", model.DiseaseId, ParameterType.GetOrPost)
                     });
             var diseaseResponseName = JsonConvert.DeserializeObject<MksResponse>(diseaseResponse);
             var diseaseName = string.Empty;
             if (diseaseResponseName.Success)
-                diseaseName = JsonConvert.DeserializeObject<string>(diseaseResponseName.Data); 
+                diseaseName = JsonConvert.DeserializeObject<string>(diseaseResponseName.Data);
+            outpatient.DiseaseId = model.DiseaseId;
+            await _context.SaveChangesAsync();
+            newOutpatient.Disease = diseaseName;
             return newOutpatient;
         }
 
@@ -146,15 +149,20 @@ namespace SmartDoctor.Medical.Core
             if (outpatientCard == null)
                 throw new Exception($"Outpatient card not found. {model.CardId}");
             outpatientCard.Description += "\n" + model.Description;
-            var diseaseResponse = await RequestExecutor.ExecuteRequestAsync(
-              MicroservicesEnum.Medical, RequestUrl.GetDiseaseIdByName,
-                  new Parameter[] {
+          
+            if (!outpatientCard.DiseaseId.HasValue)
+            {
+                var diseaseResponse = await RequestExecutor.ExecuteRequestAsync(
+                     MicroservicesEnum.Medical, RequestUrl.GetDiseaseIdByName,
+                new Parameter[] {
                         new Parameter("name", model.Disease, ParameterType.GetOrPost)
-                  });
-            var diseaseResponseName = JsonConvert.DeserializeObject<MksResponse>(diseaseResponse);
-            if (!diseaseResponseName.Success)
-                throw new Exception("Disease not found");
-            outpatientCard.DiseaseId = JsonConvert.DeserializeObject<long>(diseaseResponseName.Data);
+                });
+                var diseaseResponseName = JsonConvert.DeserializeObject<MksResponse>(diseaseResponse);
+                if (!diseaseResponseName.Success)
+                    throw new Exception("Disease not found");
+                outpatientCard.DiseaseId = JsonConvert.DeserializeObject<long>(diseaseResponseName.Data);
+            }
+                
             await _context.SaveChangesAsync();
         }
 
