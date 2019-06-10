@@ -92,10 +92,14 @@ WebRTCLib.prototype.connect = function(){
 
 WebRTCLib.prototype._processSignalingMessage = function(message) {
     var msg = JSON.parse(message);
-
+    var rtcObj = this; 
     if (msg.type === 'offer') {
-        this.pc.setRemoteDescription(new RTCSessionDescription(msg));
-        this._doAnswer();
+        this.pc.setRemoteDescription(new RTCSessionDescription(msg)), function () {
+            //console.log(pc);
+            rtcObj._doAnswer();
+        }, console.error.bind(console));
+        //this.pc.setRemoteDescription(new RTCSessionDescription(msg));
+        //this._doAnswer();
     } else if (msg.type === 'answer') {
         this.pc.setRemoteDescription(new RTCSessionDescription(msg));
     } else if (msg.type === 'candidate') {

@@ -1,8 +1,8 @@
-﻿@{
+﻿
+
+@{
     ViewData["Title"] = "Chat room";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@using SmartDoctor.Data.Enums
 
 <head>
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
@@ -35,6 +35,7 @@
 </head>
 <body>
     <center>
+
         <h2>Chat room</h2>
         <br />
         <br />
@@ -48,7 +49,6 @@
             <br />
         </div>
         <video id="localVideo" autoplay muted playsinline></video>
-
         <video id="remoteVideo" autoplay muted playsinline></video>
         <div class="container">
             <div class="row">
@@ -85,21 +85,23 @@
                 </div>
             </div>
         </div>
+        <button id="startBtnId" style="width:100px; height:25px;" class="btn-success">Start</button>
     </center>
 </body>
 
 <script>
-    var role = '@ViewBag.Creator' ? "creator" : "user" ;
+    var role = '@ViewBag.Role' ;
     var doctorId = '@ViewBag.DoctorId';
     var patientId = '@ViewBag.PatientUserId';
 
     var sendTextBtn = document.querySelector("#sendBtnId");
+    var startBtn = document.querySelector("#startBtnId");
 	var sendText = document.querySelector("#chat");
 	var textArea = document.querySelector("#chatMessaging");
- 
+
 	var config = {
 			room:doctorId + '-' + patientId,
-			creator: role=="creator",
+        creator: role == "creator",
 			pcConfig:{
 				iceServers: [{
 					'urls': 'stun:stun.l.google.com:19302'
@@ -117,19 +119,22 @@
 
 
 	var rtc = new WebRTCLib(config);
-	
+
 	rtc.onTextMessage = function(msg){
 		textArea.innerHTML += msg.fromUser +': ' + msg.value + '<br>';
 	}
-	
+
 	sendTextBtn.onclick = function() {
         rtc.sendTextMessage(sendText.value);
         textArea.innerHTML += doctorId +': ' + sendText.value + '<br>';
-     };
+    };
+
+    startBtn.onclick = function () {
+        rtc.startStream();
+    };
 
     var tokenURL = 'https://ec2-3-86-214-19.compute-1.amazonaws.com:8443/webrtc/gettoken';
-    rtc._get_token_from_signaling_server(tokenURL, doctorId, role, role=="creator"?'12345':'54321');
-	
-	 setTimeout(function() { console.log("startStream"); rtc.startStream(); }, 3000);
+    rtc._get_token_from_signaling_server(tokenURL, role == "creator" ? doctorId : patientId, role, role == "creator" ? '12345' : '54321');
+    
 
 </script>

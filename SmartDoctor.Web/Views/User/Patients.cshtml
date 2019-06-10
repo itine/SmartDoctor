@@ -208,7 +208,7 @@
     function onClickCallUser(longId) {
         var rowId = getSecondPart(longId);
         var userId = getRowData(rowId).PatientId;
-        window.location.href = '@Url.Action("DoctorRoom", "User")' + '/?patientId='+userId;
+        window.location.href = '@Url.Action("DoctorRoom", "User")' + '/?UserId=' + userId + '&IsDoctor=true' ;
     }
 
 </script>

@@ -67,13 +67,15 @@ namespace SmartDoctor.Web.Controllers
                     throw new Exception(userResponse.Data);
                 var user = JsonConvert.DeserializeObject<Users>(userResponse.Data);
                 ViewBag.PatientUserId = user.UserId;
-                ViewBag.Creator = true;
+                ViewBag.Role = "creator"; 
+               // ViewBag.Creator = true;
             }
             else
             {
                 ViewBag.DoctorId = model.UserId;
                 ViewBag.PatientUserId = _controllerRepository.GetUserId(User);
-                ViewBag.Creator = false;
+                ViewBag.Role = "user";
+                //ViewBag.Creator = false;
             }
             return View();
         }
