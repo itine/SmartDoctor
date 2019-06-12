@@ -1,6 +1,4 @@
-﻿
-
-@{
+﻿@{
     ViewData["Title"] = "Chat room";
 }
 
@@ -38,11 +36,8 @@
 
         <h2>Chat room</h2>
         <br />
-        <br />
-        <video id="localVideo" autoplay muted playsinline></video>
-        <br />
-        <br />
-        <video id="remoteVideo" autoplay muted playsinline></video>
+        <video width="450" height="450" id="localVideo" autoplay muted playsinline></video>
+        <video width="450" height="450"  id="remoteVideo" autoplay muted playsinline></video>
         <br />
         <br />
         <div id="doctor-room" class="container">
@@ -73,6 +68,8 @@
     var role = '@ViewBag.Role' ;
     var doctorId = '@ViewBag.DoctorId';
     var patientId = '@ViewBag.PatientUserId';
+    var patientName = '@ViewBag.PatientName';
+    var doctorName = '@ViewBag.DoctorName';
 
     var sendTextBtn = document.querySelector("#sendBtnId");
     var startBtn = document.querySelector("#startBtnId");
@@ -101,14 +98,15 @@
 	var rtc = new WebRTCLib(config);
 
     rtc.onTextMessage = function (msg) {
-        textArea.innerHTML += '<div class="row message-bubble"><p class="text-muted">' 
-            + msg.fromUser + '</p>' + '<span>' + msg.value + '</span> ' + + '</div>';
+        textArea.innerHTML += '<div class="row message-bubble"><p class="text-muted">'
+            + patientName + '</p>' + '<span>' + msg.value + '</span></div>';
 	}
 
-	sendTextBtn.onclick = function() {
+    sendTextBtn.onclick = function () {
         rtc.sendTextMessage(sendText.value);
         textArea.innerHTML += '<div class="row message-bubble"><p class="text-muted">'
-            + doctorId + '</p>' + '<p>' + sendText.value + '</p> ' + + '</div>';
+            + doctorName + '</p>' + '<p>' + sendText.value + '</p></div>';
+        $("#chat").val("");
     };
 
     startBtn.onclick = function () {

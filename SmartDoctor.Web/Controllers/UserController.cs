@@ -57,7 +57,8 @@ namespace SmartDoctor.Web.Controllers
         {
             if (model.IsDoctor)
             {
-                ViewBag.DoctorId = _controllerRepository.GetUserId(User);
+                var doctorId = _controllerRepository.GetUserId(User);
+                ViewBag.DoctorId = doctorId;
                 var userResponse = JsonConvert.DeserializeObject<MksResponse>(
                   await RequestExecutor.ExecuteRequestAsync(
                       MicroservicesEnum.User, RequestUrl.GetUserByPatientId, new Parameter[] {
@@ -65,16 +66,35 @@ namespace SmartDoctor.Web.Controllers
                       }));
                 if (!userResponse.Success)
                     throw new Exception(userResponse.Data);
-                var user = JsonConvert.DeserializeObject<Users>(userResponse.Data);
-                ViewBag.PatientUserId = user.UserId;
+                var user2 = JsonConvert.DeserializeObject<Users>(userResponse.Data);
+                ViewBag.PatientUserId = user2.UserId;
                 ViewBag.Role = "creator"; 
             }
             else
             {
                 ViewBag.DoctorId = model.UserId;
-                ViewBag.PatientUserId = _controllerRepository.GetUserId(User);
+                var patientUserId = _controllerRepository.GetUserId(User);
+                ViewBag.PatientUserId = patientUserId;
                 ViewBag.Role = "user";
             }
+            var userResponse2 = JsonConvert.DeserializeObject<MksResponse>(
+                 await RequestExecutor.ExecuteRequestAsync(
+                     MicroservicesEnum.User, RequestUrl.GetUserById, new Parameter[] {
+                            new Parameter("userId", ViewBag.DoctorId, ParameterType.GetOrPost)
+                     }));
+            if (!userResponse2.Success)
+                throw new Exception(userResponse2.Data);
+            var user = JsonConvert.DeserializeObject<Users>(userResponse2.Data);
+            var userResponse3 = JsonConvert.DeserializeObject<MksResponse>(
+              await RequestExecutor.ExecuteRequestAsync(
+                  MicroservicesEnum.User, RequestUrl.GetPatientByUserId, new Parameter[] {
+                                new Parameter("userId", ViewBag.PatientUserId, ParameterType.GetOrPost)
+                  }));
+            if (!userResponse3.Success)
+                throw new Exception(userResponse3.Data);
+            var patient = JsonConvert.DeserializeObject<PatientModel>(userResponse3.Data);
+            ViewBag.PatientName = patient.Fio;
+            ViewBag.DoctorName = user.Fio;
             return View();
         }
 
